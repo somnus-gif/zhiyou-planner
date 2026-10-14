@@ -1,0 +1,9 @@
+{
+  "name": "hotelPlan",
+  "version": "1.0.0",
+  "description": "酒店方案云函数 - 智游策划师 P0",
+  "main": "index.js",
+  "dependencies": {
+    "wx-server-sdk": "~2.6.3"
+  }
+}

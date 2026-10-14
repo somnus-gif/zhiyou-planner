@@ -1,0 +1,50 @@
+/* pages/order/preview/preview.wxss */
+.page { min-height: 100vh; background: #F5F7FA; padding-bottom: 60rpx; }
+
+.state-box { display: flex; flex-direction: column; align-items: center; padding: 120rpx 0; }
+.loading-text { color: #8C8C8C; font-size: 28rpx; }
+.err-illu {
+  width: 96rpx; height: 96rpx; border-radius: 50%;
+  background: #FFF1F0; color: #FF4D4F;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 56rpx; font-weight: 700; margin-bottom: 24rpx;
+}
+.err-text { font-size: 30rpx; color: #595959; margin-bottom: 24rpx; }
+.err-retry { padding: 12rpx 40rpx; background: #1BA0D7; color: #fff; border-radius: 32rpx; font-size: 26rpx; }
+
+.hero {
+  margin: 24rpx 32rpx; padding: 40rpx 32rpx; background: #fff;
+  border-radius: 20rpx; text-align: center;
+  box-shadow: 0 4rpx 16rpx rgba(27,160,215,0.08);
+}
+.hero-status {
+  display: inline-block; padding: 6rpx 20rpx; border-radius: 20rpx;
+  font-size: 24rpx; margin-bottom: 24rpx;
+}
+.hero-amount { font-size: 56rpx; font-weight: 600; color: #1A1A1A; line-height: 1.2; }
+.hero-label { font-size: 24rpx; color: #8C8C8C; margin-top: 8rpx; }
+.section-list { padding: 0 32rpx; }
+
+.section-card {
+  background: #fff; border-radius: 16rpx; padding: 24rpx;
+  margin-bottom: 16rpx; box-shadow: 0 2rpx 8rpx rgba(0,0,0,0.04);
+}
+.sec-head { display: flex; align-items: center; }
+.sec-title { font-size: 30rpx; font-weight: 600; color: #1A1A1A; flex: 1; }
+.sec-tag { padding: 4rpx 14rpx; border-radius: 16rpx; font-size: 22rpx; }
+.tag-done { background: #07C1601A; color: #07C160; }
+.tag-todo { background: #F0F2F5; color: #8C8C8C; }
+
+.sec-time { font-size: 24rpx; color: #8C8C8C; margin-top: 12rpx; }
+
+.check-grid { display: flex; flex-wrap: wrap; gap: 16rpx; margin-top: 16rpx; }
+.check-item {
+  flex: 0 0 auto; min-width: 140rpx;
+  padding: 16rpx 0; text-align: center;
+  background: #F0F2F5; color: #8C8C8C;
+  border-radius: 12rpx; font-size: 26rpx;
+}
+.check-item.check-done { background: #07C1601A; color: #07C160; }
+
+.footer-tip { text-align: center; color: #BFBFBF; font-size: 22rpx; padding: 24rpx 0; }
+.safe-bottom { height: env(safe-area-inset-bottom); }

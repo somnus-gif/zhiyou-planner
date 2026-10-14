@@ -1,0 +1,55 @@
+<!-- pages/hotel/list/list.wxml -->
+<view class="page">
+  <view class="list-area">
+    <view class="state-box" wx:if="{{pageState==='loading'}}">
+      <view class="skeleton-card" wx:for="{{[1,2,3]}}" wx:key="*this">
+        <view class="sk-line sk-title"></view>
+        <view class="sk-line sk-sub"></view>
+      </view>
+    </view>
+
+    <view class="state-box" wx:elif="{{pageState==='empty'}}">
+      <view class="empty-illu">无</view>
+      <view class="empty-text">暂无酒店方案</view>
+      <view class="empty-tip">点击右下角"+"新建酒店方案</view>
+    </view>
+
+    <view class="state-box" wx:elif="{{pageState==='error'}}">
+      <view class="err-illu">!</view>
+      <view class="err-text">网络异常，加载失败</view>
+      <view class="err-retry" bindtap="onRetry">点击重试</view>
+    </view>
+
+    <view class="hotel-list" wx:else>
+      <view class="hotel-item" wx:for="{{hotelList}}" wx:key="_id"
+            data-id="{{item._id}}" bindtap="onHotelTap">
+        <view class="item-head">
+          <text class="city-text">{{item.city}}</text>
+          <text class="date-text">{{item.checkInText}} - {{item.checkOutText}}</text>
+        </view>
+        <view class="item-body" wx:if="{{item.selectedHotel}}">
+          <image wx:if="{{item.selectedHotel.image}}" src="{{item.selectedHotel.image}}" mode="aspectFill" class="hotel-thumb" />
+          <view class="hotel-info">
+            <text class="selected-hotel-name">{{item.selectedHotel.name}}</text>
+            <view class="star-row">
+              <text class="star-tag">{{item.selectedHotel.star}}星</text>
+              <text class="room-type">{{item.selectedHotel.roomType}}</text>
+            </view>
+            <text class="selected-price">¥{{item.selectedHotel.totalPriceText}}</text>
+          </view>
+        </view>
+        <view class="item-body unselected" wx:else>
+          <text class="opt-count">{{item.optionCount}} 家酒店待选</text>
+        </view>
+        <view class="item-meta">
+          <text>建于 {{item.createdAtText}}</text>
+        </view>
+      </view>
+      <view class="load-more" wx:if="{{loadingMore}}">加载中...</view>
+      <view class="load-more" wx:elif="{{!hasMore && hotelList.length}}">没有更多了</view>
+    </view>
+  </view>
+
+  <view class="fab" bindtap="onCreateTap">+</view>
+  <view class="safe-bottom"></view>
+</view>

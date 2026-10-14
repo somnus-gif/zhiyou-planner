@@ -1,0 +1,95 @@
+<!-- pages/index/index.wxml - 工作台首页 -->
+<view class="page">
+
+  <!-- 顶部欢迎条 + 今日概览 -->
+  <view class="hero">
+    <view class="hero-greeting">
+      <view class="greet-text">{{userInfo.name ? userInfo.name + '，' : ''}}今日工作顺利</view>
+      <view class="greet-sub">智游策划师 · {{todayStats.todoCount}} 项待办待处理</view>
+    </view>
+    <view class="hero-stats">
+      <view class="stat-item">
+        <view class="stat-num">{{todayStats.following}}</view>
+        <view class="stat-label">出行中</view>
+      </view>
+      <view class="stat-divider"></view>
+      <view class="stat-item">
+        <view class="stat-num">{{todayStats.newThisWeek}}</view>
+        <view class="stat-label">本周新增</view>
+      </view>
+      <view class="stat-divider"></view>
+      <view class="stat-item">
+        <view class="stat-num">{{todayStats.todoCount}}</view>
+        <view class="stat-label">待办</view>
+      </view>
+    </view>
+  </view>
+
+  <!-- 快捷入口 -->
+  <view class="quick-grid">
+    <view class="quick-item" wx:for="{{quickActions}}" wx:key="key"
+          data-path="{{item.path}}" bindtap="onQuickTap">
+      <view class="quick-icon" style="background:{{index===0?'#1BA0D7':index===1?'#7E57C2':index===2?'#FA8C16':'#07C160'}};">
+        <text class="quick-icon-text">{{index===0?'新':index===1?'机':index===2?'酒':'景'}}</text>
+      </view>
+      <view class="quick-label">{{item.label}}</view>
+    </view>
+  </view>
+
+  <!-- 阶段筛选 Tab（横向滚动） -->
+  <scroll-view scroll-x class="stage-tabs" enhanced show-scrollbar="{{false}}">
+    <view class="stage-tab {{currentStage===item.key?'active':''}}"
+          wx:for="{{stageTabs}}" wx:key="key"
+          data-key="{{item.key}}" bindtap="onStageTap"
+          style="{{currentStage===item.key ? 'color:#fff;background:'+item.color+';border-color:'+item.color : 'color:'+item.color}}">
+      <text>{{item.label}}</text>
+      <text class="stage-count">{{item.count}}</text>
+    </view>
+  </scroll-view>
+
+  <!-- 客户列表区 - 三态：loading / empty / error / list -->
+  <view class="list-area">
+
+    <view class="state-box" wx:if="{{pageState==='loading'}}">
+      <view class="skeleton-card" wx:for="{{[1,2,3]}}" wx:key="*this">
+        <view class="sk-line sk-title"></view>
+        <view class="sk-line sk-sub"></view>
+      </view>
+    </view>
+
+    <view class="state-box" wx:elif="{{pageState==='empty'}}">
+      <view class="empty-illu">○</view>
+      <view class="empty-text">该阶段暂无客户</view>
+      <view class="empty-tip">点击上方"新建客户"开启新单</view>
+    </view>
+
+    <view class="state-box" wx:elif="{{pageState==='error'}}">
+      <view class="err-illu">!</view>
+      <view class="err-text">网络异常，加载失败</view>
+      <view class="err-retry" bindtap="onRetry">点击重试</view>
+    </view>
+
+    <view class="customer-list" wx:else>
+      <view class="cust-card" wx:for="{{customerList}}" wx:key="id"
+            data-id="{{item.id}}" bindtap="onCustomerTap">
+        <view class="cust-head">
+          <view class="cust-avatar">{{item.name[0]}}</view>
+          <view class="cust-info">
+            <view class="cust-name">{{item.name}}</view>
+            <view class="cust-phone">{{item.phoneMask}}</view>
+          </view>
+          <view class="stage-tag" style="color:{{item.stageColor}};background:{{item.stageColor}}1A;">
+            {{item.stageLabel}}
+          </view>
+        </view>
+        <view class="cust-wish" wx:if="{{item.scenicWish.length}}">
+          <text class="wish-label">意向：</text>
+          <text class="wish-text">{{item.scenicWish}}</text>
+        </view>
+      </view>
+    </view>
+
+  </view>
+
+  <view class="safe-bottom"></view>
+</view>

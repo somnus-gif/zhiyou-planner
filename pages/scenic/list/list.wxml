@@ -1,0 +1,73 @@
+<!-- pages/scenic/list/list.wxml -->
+<view class="page">
+
+  <view class="search-bar">
+    <view class="search-input">
+      <text class="search-icon">Q</text>
+      <input class="search-field" type="text" placeholder="搜索景点名称"
+             value="{{keyword}}" bindinput="onSearchInput" bindconfirm="onSearchConfirm" confirm-type="search" />
+      <text class="search-clear" wx:if="{{keyword}}" bindtap="onClearKeyword">×</text>
+    </view>
+  </view>
+
+  <scroll-view scroll-x class="filter-row" enhanced show-scrollbar="{{false}}">
+    <view class="filter-chip {{cityFilter===item?'active':''}}"
+          wx:for="{{cityOptions}}" wx:key="*this"
+          data-city="{{item}}" bindtap="onCityTap">{{item}}</view>
+  </scroll-view>
+
+  <scroll-view scroll-x class="filter-row" enhanced show-scrollbar="{{false}}">
+    <view class="filter-chip tag {{tagFilter===item?'active':''}}"
+          wx:for="{{tagOptions}}" wx:key="*this"
+          data-tag="{{item}}" bindtap="onTagTap">{{item}}</view>
+  </scroll-view>
+
+  <view class="list-area">
+    <view class="state-box" wx:if="{{pageState==='loading'}}">
+      <view class="skeleton-card" wx:for="{{[1,2,3,4]}}" wx:key="*this">
+        <view class="sk-img"></view>
+        <view class="sk-line sk-title"></view>
+        <view class="sk-line sk-sub"></view>
+      </view>
+    </view>
+
+    <view class="state-box" wx:elif="{{pageState==='empty'}}">
+      <view class="empty-illu">○</view>
+      <view class="empty-text">{{keyword || tagFilter || cityFilter!=='全部' ? '没有找到匹配的景点' : '景点库暂无数据'}}</view>
+      <view class="empty-action" wx:if="{{!keyword && !tagFilter && cityFilter==='全部'}}"
+            bindtap="onInitDemo">加载演示数据（8 条云南经典景点）</view>
+    </view>
+
+    <view class="state-box" wx:elif="{{pageState==='error'}}">
+      <view class="err-illu">!</view>
+      <view class="err-text">网络异常，加载失败</view>
+      <view class="err-retry" bindtap="onRetry">点击重试</view>
+    </view>
+
+    <view class="scenic-grid" wx:else>
+      <view class="scenic-card" wx:for="{{scenicList}}" wx:key="_id"
+            data-id="{{item._id}}" bindtap="onScenicTap">
+        <view class="cover">
+          <image wx:if="{{item.coverOrInitial}}" src="{{item.coverOrInitial}}" mode="aspectFill" class="cover-img" />
+          <view wx:else class="cover-initial">{{item.initial}}</view>
+        </view>
+        <view class="meta">
+          <view class="name">{{item.name}}</view>
+          <view class="location">{{item.city}}</view>
+          <view class="highlights">
+            <text class="hl-chip" wx:for="{{item.highlights}}" wx:for-item="h" wx:key="*this">{{h}}</text>
+          </view>
+          <view class="bottom">
+            <text class="price">{{item.priceText}}</text>
+            <text class="duration" wx:if="{{item.duration}}">建议 {{item.duration}}h</text>
+          </view>
+        </view>
+      </view>
+
+      <view class="load-more" wx:if="{{loadingMore}}">加载中...</view>
+      <view class="load-more" wx:elif="{{!hasMore && scenicList.length}}">没有更多了</view>
+    </view>
+  </view>
+
+  <view class="safe-bottom"></view>
+</view>

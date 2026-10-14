@@ -1,0 +1,68 @@
+<!-- pages/quote/list/list.wxml -->
+<view class="page">
+
+  <scroll-view scroll-x class="status-tabs" enhanced show-scrollbar="{{false}}">
+    <view class="status-tab {{currentStatus===item.key?'active':''}}"
+          wx:for="{{statusTabs}}" wx:key="key"
+          data-key="{{item.key}}" bindtap="onStatusTap"
+          style="{{currentStatus===item.key ? 'color:#fff;background:'+item.color+';border-color:'+item.color : 'color:'+item.color}}">
+      <text>{{item.label}}</text>
+    </view>
+  </scroll-view>
+
+  <view class="list-area">
+    <view class="state-box" wx:if="{{pageState==='loading'}}">
+      <view class="skeleton-card" wx:for="{{[1,2,3]}}" wx:key="*this">
+        <view class="sk-line sk-title"></view>
+        <view class="sk-line sk-sub"></view>
+      </view>
+    </view>
+
+    <view class="state-box" wx:elif="{{pageState==='empty'}}">
+      <view class="empty-illu">¥</view>
+      <view class="empty-text">暂无报价单</view>
+      <view class="empty-tip">点击右下角"+"新建报价</view>
+    </view>
+
+    <view class="state-box" wx:elif="{{pageState==='error'}}">
+      <view class="err-illu">!</view>
+      <view class="err-text">网络异常，加载失败</view>
+      <view class="err-retry" bindtap="onRetry">点击重试</view>
+    </view>
+
+    <view class="quote-list" wx:else>
+      <view class="quote-card" wx:for="{{quoteList}}" wx:key="_id"
+            data-id="{{item._id}}" bindtap="onQuoteTap">
+        <view class="quote-head">
+          <view class="quote-version">v{{item.version}}</view>
+          <view class="quote-items-count">{{item.itemsCount}}项</view>
+          <view class="status-tag" style="color:{{item.statusColor}};background:{{item.statusColor}}1A;">
+            {{ item.status === 'draft' ? '草稿' :
+               item.status === 'sent' ? '已发送' :
+               item.status === 'bargaining' ? '议价中' :
+               item.status === 'confirmed' ? '已确认' : item.status }}
+          </view>
+        </view>
+        <view class="quote-body">
+          <view class="quote-total">
+            <text class="total-label">合计</text>
+            <text class="total-amount">¥{{item.totalText}}</text>
+          </view>
+          <view class="quote-profit">
+            <text class="profit-label">利润</text>
+            <text class="profit-amount">¥{{item.profitText}}</text>
+          </view>
+        </view>
+        <view class="quote-meta">
+          <text class="meta-time">更新于 {{item.updatedAtText}}</text>
+        </view>
+      </view>
+
+      <view class="load-more" wx:if="{{loadingMore}}">加载中...</view>
+      <view class="load-more" wx:elif="{{!hasMore && quoteList.length}}">没有更多了</view>
+    </view>
+  </view>
+
+  <view class="fab" bindtap="onCreateTap">+</view>
+  <view class="safe-bottom"></view>
+</view>

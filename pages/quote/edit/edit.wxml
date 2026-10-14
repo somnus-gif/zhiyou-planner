@@ -1,0 +1,123 @@
+<!-- pages/quote/edit/edit.wxml -->
+<view class="page" wx:if="{{pageState==='form'}}">
+
+  <!-- 顶部信息 -->
+  <view class="header-card">
+    <view class="header-row">
+      <text class="header-label">客户</text>
+      <text class="header-value">{{customer.name || '关联客户'}}</text>
+    </view>
+    <view class="header-row" wx:if="{{quote}}">
+      <text class="header-label">版本</text>
+      <text class="header-value">v{{quote.version}} · {{ quote.status === 'draft' ? '草稿' : quote.status === 'sent' ? '已发送' : quote.status === 'bargaining' ? '议价中' : quote.status === 'confirmed' ? '已确认' : quote.status }}</text>
+    </view>
+  </view>
+
+  <!-- items 编辑区 -->
+  <view class="items-section">
+    <view class="section-title">报价条目</view>
+
+    <view class="item-card" wx:for="{{items}}" wx:key="index">
+      <view class="item-head">
+        <picker class="item-type-picker" range="{{itemTypes}}" range-key="label" data-index="{{index}}" bindchange="onTypeChange">
+          <view class="item-type-tag">{{item.typeLabel}}</view>
+        </picker>
+        <view class="item-remove" data-index="{{index}}" bindtap="onRemoveItem">×</view>
+      </view>
+
+      <view class="item-row">
+        <text class="item-label">名称</text>
+        <input class="item-input" type="text" placeholder="如：北京-上海机票" data-index="{{index}}" data-field="name" value="{{item.name}}" bindinput="onItemInput" />
+      </view>
+      <view class="item-row">
+        <text class="item-label">规格</text>
+        <input class="item-input" type="text" placeholder="如：经济舱/含早" data-index="{{index}}" data-field="spec" value="{{item.spec}}" bindinput="onItemInput" />
+      </view>
+      <view class="item-row-3">
+        <view class="item-col">
+          <text class="item-label">数量</text>
+          <input class="item-input num" type="digit" data-index="{{index}}" data-field="qtyText" value="{{item.qtyText}}" bindinput="onItemInput" />
+        </view>
+        <view class="item-col">
+          <text class="item-label">售价(元)</text>
+          <input class="item-input num" type="digit" data-index="{{index}}" data-field="priceText" value="{{item.priceText}}" bindinput="onItemInput" />
+        </view>
+        <view class="item-col">
+          <text class="item-label">成本(元)</text>
+          <input class="item-input num" type="digit" data-index="{{index}}" data-field="costText" value="{{item.costText}}" bindinput="onItemInput" />
+        </view>
+      </view>
+    </view>
+
+    <view class="add-item-btn" bindtap="onAddItem">+ 添加条目</view>
+  </view>
+
+  <!-- 汇总 -->
+  <view class="summary-card">
+    <view class="sum-row">
+      <text class="sum-label">售价合计</text>
+      <text class="sum-value">¥{{totalText}}</text>
+    </view>
+    <view class="sum-row">
+      <text class="sum-label">成本合计</text>
+      <text class="sum-value">¥{{costTotalText}}</text>
+    </view>
+    <view class="sum-row profit">
+      <text class="sum-label">利润</text>
+      <text class="sum-value profit-value">¥{{profitText}}</text>
+    </view>
+  </view>
+
+  <!-- 底部操作栏 -->
+  <view class="action-bar">
+    <button class="action-btn primary" bindtap="onSave" disabled="{{saving}}">{{mode==='create'?'创建报价':'保存'}}</button>
+    <button class="action-btn ghost" wx:if="{{mode==='edit' && quote && (quote.status==='draft' || quote.status==='bargaining')}}" bindtap="onSend">发送报价</button>
+    <button class="action-btn warn" wx:if="{{mode==='edit' && quote && (quote.status==='sent' || quote.status==='bargaining')}}" bindtap="onOpenAdjust">议价</button>
+  </view>
+
+  <view class="safe-bottom"></view>
+
+  <!-- 议价弹窗 -->
+  <view class="modal-mask" wx:if="{{showAdjust}}" bindtap="onCloseAdjust">
+    <view class="modal-body" catchtap="">
+      <view class="modal-title">议价调整</view>
+      <view class="modal-tip">调整数量/售价，提交后版本号自增，原值写入历史</view>
+
+      <scroll-view scroll-y class="adjust-list">
+        <view class="adjust-item" wx:for="{{adjustItems}}" wx:key="index">
+          <view class="adj-name">{{item.name || '未命名'}}</view>
+          <view class="adj-row">
+            <text class="adj-label">数量</text>
+            <input class="adj-input" type="digit" data-index="{{index}}" data-field="qtyText" value="{{item.qtyText}}" bindinput="onAdjustItemInput" />
+            <text class="adj-label">售价</text>
+            <input class="adj-input" type="digit" data-index="{{index}}" data-field="priceText" value="{{item.priceText}}" bindinput="onAdjustItemInput" />
+          </view>
+        </view>
+      </scroll-view>
+
+      <view class="adj-summary">
+        <text>调整后合计：¥{{adjustTotalText}}</text>
+      </view>
+
+      <view class="adj-reason-row">
+        <text class="adj-label">调价原因</text>
+        <input class="adj-reason-input" type="text" placeholder="如：客户砍价500元" value="{{adjustReason}}" bindinput="onAdjustReasonInput" />
+      </view>
+
+      <view class="modal-actions">
+        <button class="modal-btn cancel" bindtap="onCloseAdjust">取消</button>
+        <button class="modal-btn confirm" bindtap="onConfirmAdjust">提交议价</button>
+      </view>
+    </view>
+  </view>
+
+</view>
+
+<view class="state-box" wx:elif="{{pageState==='loading'}}">
+  <view class="loading-text">加载中...</view>
+</view>
+
+<view class="state-box" wx:elif="{{pageState==='error'}}">
+  <view class="err-illu">!</view>
+  <view class="err-text">加载失败</view>
+</view>

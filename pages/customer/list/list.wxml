@@ -1,0 +1,72 @@
+<!-- pages/customer/list/list.wxml -->
+<view class="page">
+
+  <view class="search-bar">
+    <view class="search-input">
+      <text class="search-icon">Q</text>
+      <input class="search-field" type="text" placeholder="搜索客户姓名"
+             value="{{keyword}}" bindinput="onSearchInput" bindconfirm="onSearchConfirm" confirm-type="search" />
+      <text class="search-clear" wx:if="{{keyword}}" bindtap="onClearKeyword">×</text>
+    </view>
+  </view>
+
+  <scroll-view scroll-x class="stage-tabs" enhanced show-scrollbar="{{false}}">
+    <view class="stage-tab {{currentStage===item.key?'active':''}}"
+          wx:for="{{stageTabs}}" wx:key="key"
+          data-key="{{item.key}}" bindtap="onStageTap"
+          style="{{currentStage===item.key ? 'color:#fff;background:'+item.color+';border-color:'+item.color : 'color:'+item.color}}">
+      <text>{{item.label}}</text>
+      <text class="stage-count">{{item.count}}</text>
+    </view>
+  </scroll-view>
+
+  <view class="list-area">
+    <view class="state-box" wx:if="{{pageState==='loading'}}">
+      <view class="skeleton-card" wx:for="{{[1,2,3,4]}}" wx:key="*this">
+        <view class="sk-line sk-title"></view>
+        <view class="sk-line sk-sub"></view>
+      </view>
+    </view>
+
+    <view class="state-box" wx:elif="{{pageState==='empty'}}">
+      <view class="empty-illu">○</view>
+      <view class="empty-text">{{keyword ? '没有找到匹配的客户' : '该阶段暂无客户'}}</view>
+      <view class="empty-tip" wx:if="{{!keyword}}">点击右下角"+"新建客户</view>
+    </view>
+
+    <view class="state-box" wx:elif="{{pageState==='error'}}">
+      <view class="err-illu">!</view>
+      <view class="err-text">网络异常，加载失败</view>
+      <view class="err-retry" bindtap="onRetry">点击重试</view>
+    </view>
+
+    <view class="customer-list" wx:else>
+      <view class="cust-card" wx:for="{{customerList}}" wx:key="_id"
+            data-id="{{item._id}}" bindtap="onCustomerTap">
+        <view class="cust-head">
+          <view class="cust-avatar">{{item.name[0]}}</view>
+          <view class="cust-info">
+            <view class="cust-name">{{item.name}}</view>
+            <view class="cust-phone">{{item.phoneMask}}</view>
+          </view>
+          <view class="stage-tag" style="color:{{item.stageColor}};background:{{item.stageColor}}1A;">
+            {{item.stageLabel}}
+          </view>
+        </view>
+        <view class="cust-meta">
+          <view class="meta-wish" wx:if="{{item.scenicWish.length}}">
+            <text class="meta-label">意向：</text>
+            <text class="meta-text">{{item.scenicWish}}</text>
+          </view>
+          <view class="meta-time">更新于 {{item.updatedAtText}}</view>
+        </view>
+      </view>
+
+      <view class="load-more" wx:if="{{loadingMore}}">加载中...</view>
+      <view class="load-more" wx:elif="{{!hasMore && customerList.length}}">没有更多了</view>
+    </view>
+  </view>
+
+  <view class="fab" bindtap="onNewTap">+</view>
+  <view class="safe-bottom"></view>
+</view>

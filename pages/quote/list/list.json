@@ -1,0 +1,6 @@
+{
+  "navigationBarTitleText": "报价单",
+  "enablePullDownRefresh": true,
+  "backgroundTextStyle": "dark",
+  "usingComponents": {}
+}

@@ -1,0 +1,9 @@
+{
+  "name": "tripPlan",
+  "version": "1.0.0",
+  "description": "智游策划师 - 行程规划云函数",
+  "main": "index.js",
+  "dependencies": {
+    "wx-server-sdk": "~2.6.3"
+  }
+}

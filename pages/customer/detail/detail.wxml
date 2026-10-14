@@ -1,0 +1,198 @@
+<!-- pages/customer/detail/detail.wxml -->
+<view class="page">
+
+  <view class="state-box" wx:if="{{pageState==='loading'}}">
+    <view class="loading-text">加载中...</view>
+  </view>
+
+  <view class="state-box" wx:elif="{{pageState==='error'}}">
+    <view class="err-illu">!</view>
+    <view class="err-text">客户不存在或加载失败</view>
+    <view class="err-retry" bindtap="onRetry">点击重试</view>
+  </view>
+
+  <block wx:else>
+    <view class="hero" style="background: linear-gradient(135deg, {{stageColor}} 0%, {{stageColor}}CC 100%);">
+      <view class="hero-row">
+        <view class="hero-avatar">{{customer.name[0]}}</view>
+        <view class="hero-info">
+          <view class="hero-name">{{customer.name}}</view>
+          <view class="hero-phone" bindtap="onCallPhone">{{customer.phoneMask}}  [拨打]</view>
+        </view>
+        <view class="hero-stage" style="color:{{stageColor}};background:#fff;">
+          {{stageLabel}}
+        </view>
+      </view>
+      <view class="hero-meta">
+        <text class="meta-item" wx:if="{{customer.source}}">客源：{{customer.source}}</text>
+        <text class="meta-item">建档：{{customer.createdAtText}}</text>
+      </view>
+      <view class="hero-lost" wx:if="{{customer.stage==='lost'}}">
+        流失原因：{{customer.lostReason}}
+      </view>
+    </view>
+
+    <view class="action-bar">
+      <view class="action-btn edit" bindtap="onEdit">编辑档案</view>
+      <view class="action-btn advance" wx:if="{{!isTerminal}}" bindtap="onAdvanceStage">
+        {{advancing ? '推进中...' : '推进至 ' + nextStageLabel}}
+      </view>
+      <view class="action-btn lost" wx:if="{{!isTerminal}}" bindtap="onLost">流失归档</view>
+    </view>
+
+    <view class="section">
+      <view class="section-title">基本信息</view>
+      <view class="info-card">
+        <view class="info-row">
+          <text class="info-label">偏好</text>
+          <view class="info-value" wx:if="{{customer.preferences.length}}">
+            <text class="chip" wx:for="{{customer.preferences}}" wx:key="*this">{{item}}</text>
+          </view>
+          <text class="info-value placeholder" wx:else>未填写</text>
+        </view>
+        <view class="info-row">
+          <text class="info-label">想去景点</text>
+          <view class="info-value" wx:if="{{customer.scenicWish.length}}">
+            <text wx:for="{{customer.scenicWish}}" wx:key="*this" class="wish-item">{{item}}</text>
+          </view>
+          <text class="info-value placeholder" wx:else>未填写</text>
+        </view>
+        <view class="info-row">
+          <text class="info-label">预算</text>
+          <text class="info-value">{{customer.budgetText}}</text>
+        </view>
+        <view class="info-row" wx:if="{{customer.travelStartText}}">
+          <text class="info-label">出行日期</text>
+          <text class="info-value">{{customer.travelStartText}} ~ {{customer.travelEndText}}（{{customer.travelDays}}天）</text>
+        </view>
+        <view class="info-row" wx:if="{{customer.paxText}}">
+          <text class="info-label">人数</text>
+          <text class="info-value">{{customer.paxText}}</text>
+        </view>
+        <view class="info-row" wx:if="{{customer.wechat}}">
+          <text class="info-label">微信</text>
+          <text class="info-value">{{customer.wechat}}</text>
+        </view>
+      </view>
+    </view>
+
+    <view class="section">
+      <view class="section-title">
+        关联行程
+        <text class="title-action" bindtap="onCreateTrip">+ 新建</text>
+      </view>
+      <view class="info-card">
+        <view class="trip-item" wx:for="{{trips}}" wx:key="_id" data-id="{{item._id}}" bindtap="onTripTap">
+          <view class="trip-title">{{item.title || '未命名行程'}}</view>
+          <view class="trip-status">{{item.status}}</view>
+        </view>
+        <view class="empty-tip" wx:if="{{!trips.length}}" bindtap="onCreateTrip">暂无行程，点击创建</view>
+      </view>
+    </view>
+
+    <view class="section">
+      <view class="section-title">
+        关联报价
+        <text class="title-action" bindtap="onCreateQuote">+ 新建</text>
+      </view>
+      <view class="info-card">
+        <view class="quote-item" wx:for="{{quotes}}" wx:key="_id" data-id="{{item._id}}" bindtap="onQuoteTap">
+          <view class="quote-left">
+            <view class="quote-ver">v{{item.version}}</view>
+            <view class="quote-amount">¥{{item.totalText}}</view>
+          </view>
+          <view class="quote-right">
+            <view class="quote-status">{{item.statusLabel}}</view>
+            <view class="quote-time">{{item.updatedAtText}}</view>
+          </view>
+        </view>
+        <view class="empty-tip" wx:if="{{!quotes.length}}" bindtap="onCreateQuote">暂无报价，点击创建</view>
+      </view>
+    </view>
+
+    <view class="section">
+      <view class="section-title">
+        关联订单
+        <text class="title-action" bindtap="onCreateOrder">+ 新建</text>
+      </view>
+      <view class="info-card">
+        <view class="quote-item" wx:for="{{orders}}" wx:key="_id" data-id="{{item._id}}" bindtap="onOrderTap">
+          <view class="quote-left">
+            <view class="quote-amount">¥{{item.totalText}}</view>
+          </view>
+          <view class="quote-right">
+            <view class="quote-status">{{item.statusLabel}}</view>
+            <view class="quote-time">{{item.updatedAtText}}</view>
+          </view>
+        </view>
+        <view class="empty-tip" wx:if="{{!orders.length}}" bindtap="onCreateOrder">暂无订单，点击创建</view>
+      </view>
+    </view>
+
+    <view class="section">
+      <view class="section-title">
+        关联机票
+        <text class="title-action" bindtap="onCreateFlight">+ 新建</text>
+      </view>
+      <view class="info-card">
+        <view class="quote-item" wx:for="{{flights}}" wx:key="_id" data-id="{{item._id}}" bindtap="onFlightTap">
+          <view class="quote-left">
+            <view class="quote-amount">{{item.routeText}}</view>
+            <view class="quote-time">{{item.fromDateText}}</view>
+          </view>
+          <view class="quote-right">
+            <view class="quote-status" wx:if="{{item.flightNoText}}">{{item.airlineText}} {{item.flightNoText}}</view>
+            <view class="quote-status" wx:else>{{item.optionCount}} 条待选</view>
+            <view class="quote-time" wx:if="{{item.priceText}}">¥{{item.priceText}}</view>
+          </view>
+        </view>
+        <view class="empty-tip" wx:if="{{!flights.length}}" bindtap="onCreateFlight">暂无机票查询，点击创建</view>
+      </view>
+    </view>
+
+    <view class="section">
+      <view class="section-title">
+        关联酒店
+        <text class="title-action" bindtap="onCreateHotel">+ 新建</text>
+      </view>
+      <view class="info-card">
+        <view class="quote-item" wx:for="{{hotels}}" wx:key="_id" data-id="{{item._id}}" bindtap="onHotelTap">
+          <view class="quote-left">
+            <view class="quote-amount">{{item.cityText}}</view>
+            <view class="quote-time">{{item.dateText}}</view>
+          </view>
+          <view class="quote-right">
+            <view class="quote-status" wx:if="{{item.hotelName}}">{{item.hotelName}}</view>
+            <view class="quote-status" wx:else>{{item.optionCount}} 家待选</view>
+            <view class="quote-time" wx:if="{{item.priceText}}">¥{{item.priceText}}</view>
+          </view>
+        </view>
+        <view class="empty-tip" wx:if="{{!hotels.length}}" bindtap="onCreateHotel">暂无酒店方案，点击创建</view>
+      </view>
+    </view>
+
+    <view class="section">
+      <view class="section-title">沟通记录 <text class="title-count">({{notes.length}})</text></view>
+      <view class="info-card">
+        <view class="note-item" wx:for="{{notes}}" wx:key="ts">
+          <view class="note-dot"></view>
+          <view class="note-body">
+            <view class="note-time">{{item.tsText}}</view>
+            <view class="note-content">{{item.content}}</view>
+          </view>
+        </view>
+        <view class="empty-tip" wx:if="{{!notes.length}}">暂无沟通记录</view>
+      </view>
+    </view>
+
+    <view style="height: 200rpx"></view>
+
+    <view class="footer-input safe-bottom">
+      <input class="note-input" type="text" placeholder="追加沟通记录..." value="{{noteInput}}"
+             bindinput="onNoteInput" confirm-type="send" bindconfirm="onSubmitNote" />
+      <view class="send-btn {{(noteInput && !submittingNote) ? '' : 'disabled'}}" bindtap="onSubmitNote">
+        {{submittingNote ? '...' : '记录'}}
+      </view>
+    </view>
+  </block>
+</view>

@@ -1,0 +1,6 @@
+{
+  "navigationBarTitleText": "景点库",
+  "enablePullDownRefresh": true,
+  "backgroundTextStyle": "dark",
+  "usingComponents": {}
+}

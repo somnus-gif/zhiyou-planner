@@ -1,0 +1,54 @@
+{
+  "pages": [
+    "pages/index/index",
+    "pages/customer/list/list",
+    "pages/customer/edit/edit",
+    "pages/customer/detail/detail",
+    "pages/scenic/list/list",
+    "pages/scenic/detail/detail",
+    "pages/trip/editor/editor",
+    "pages/trip/preview/preview",
+    "pages/quote/list/list",
+    "pages/quote/edit/edit",
+    "pages/quote/detail/detail",
+    "pages/order/list/list",
+    "pages/order/detail/detail",
+    "pages/order/preview/preview",
+    "pages/flight/list/list",
+    "pages/flight/query/query",
+    "pages/hotel/list/list",
+    "pages/hotel/detail/detail",
+    "pages/profile/index/index"
+  ],
+  "window": {
+    "backgroundTextStyle": "dark",
+    "navigationBarBackgroundColor": "#1BA0D7",
+    "navigationBarTitleText": "智游策划师",
+    "navigationBarTextStyle": "white",
+    "backgroundColor": "#F5F7FA"
+  },
+  "tabBar": {
+    "color": "#9AA5B5",
+    "selectedColor": "#1BA0D7",
+    "backgroundColor": "#FFFFFF",
+    "borderStyle": "white",
+    "list": [
+      {
+        "pagePath": "pages/index/index",
+        "text": "工作台"
+      },
+      {
+        "pagePath": "pages/customer/list/list",
+        "text": "客户"
+      },
+      {
+        "pagePath": "pages/profile/index/index",
+        "text": "我的"
+      }
+    ]
+  },
+  "cloud": true,
+  "style": "v2",
+  "sitemapLocation": "sitemap.json",
+  "lazyCodeLoading": "requiredComponents"
+}

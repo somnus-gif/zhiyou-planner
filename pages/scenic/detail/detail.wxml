@@ -1,0 +1,106 @@
+<!-- pages/scenic/detail/detail.wxml -->
+<view class="page">
+
+  <view class="state-box" wx:if="{{pageState==='loading'}}">
+    <view class="loading-text">加载中...</view>
+  </view>
+
+  <view class="state-box" wx:elif="{{pageState==='error'}}">
+    <view class="err-illu">!</view>
+    <view class="err-text">景点不存在或加载失败</view>
+    <view class="err-retry" bindtap="onRetry">点击重试</view>
+  </view>
+
+  <block wx:else>
+    <view class="gallery">
+      <swiper class="swiper" indicator-dots="{{gallery.length > 1}}" autoplay="{{gallery.length > 1}}"
+              circular="{{gallery.length > 1}}" interval="4000" duration="500"
+              indicator-color="rgba(255,255,255,0.5)" indicator-active-color="#fff">
+        <swiper-item wx:if="{{!gallery.length}}">
+          <view class="swiper-initial">{{initial}}</view>
+        </swiper-item>
+        <swiper-item wx:for="{{gallery}}" wx:key="*this"
+                     data-idx="{{index}}" bindtap="onPreviewImage">
+          <image src="{{item}}" mode="aspectFill" class="swiper-img" />
+        </swiper-item>
+      </swiper>
+      <view class="upload-cover-btn" bindtap="onUploadCover">上传图片</view>
+    </view>
+
+    <!-- 视频展示 -->
+    <view class="video-section" wx:if="{{scenic.videoUrl}}">
+      <view class="section-title">景点视频</view>
+      <video src="{{scenic.videoUrl}}" controls class="scenic-video" object-fit="cover"></video>
+    </view>
+    <view class="upload-video-btn" bindtap="onUploadVideo">{{scenic.videoUrl ? '更换视频' : '上传视频'}}</view>
+
+    <view class="header">
+      <view class="title">{{scenic.name}}</view>
+      <view class="loc-row">
+        <text class="loc">{{scenic.city}}{{scenic.province ? ' · ' + scenic.province : ''}}</text>
+        <text class="tag" wx:for="{{scenic.tags}}" wx:key="*this">#{{item}}</text>
+      </view>
+    </view>
+
+    <view class="info-grid">
+      <view class="info-cell">
+        <view class="cell-label">门票</view>
+        <view class="cell-value price-text">{{priceText}}</view>
+      </view>
+      <view class="info-cell">
+        <view class="cell-label">建议时长</view>
+        <view class="cell-value">{{scenic.duration || 0}} 小时</view>
+      </view>
+      <view class="info-cell" wx:if="{{scenic.openHours}}">
+        <view class="cell-label">开放时间</view>
+        <view class="cell-value">{{scenic.openHours}}</view>
+      </view>
+      <view class="info-cell" wx:if="{{scenic.address}}">
+        <view class="cell-label">地址</view>
+        <view class="cell-value">{{scenic.address}}</view>
+      </view>
+    </view>
+
+    <view class="section" wx:if="{{scenic.highlights.length}}">
+      <view class="section-title">景点卖点</view>
+      <view class="chip-list">
+        <view class="chip highlight" wx:for="{{scenic.highlights}}" wx:key="*this">{{item}}</view>
+      </view>
+    </view>
+
+    <view class="section" wx:if="{{scenic.suitableFor.length}}">
+      <view class="section-title">适合人群</view>
+      <view class="chip-list">
+        <view class="chip suitable" wx:for="{{scenic.suitableFor}}" wx:key="*this">{{item}}</view>
+      </view>
+    </view>
+
+    <view class="section" wx:if="{{scenic.intro}}">
+      <view class="section-title">景点介绍</view>
+      <view class="intro-card">
+        <text class="intro-text">{{scenic.intro}}</text>
+      </view>
+    </view>
+
+    <!-- 游玩方式 -->
+    <view class="section" wx:if="{{scenic.playGuide}}">
+      <view class="section-title-row">
+        <view class="section-title">游玩方式</view>
+        <text class="edit-link" bindtap="onEditPlayGuide">编辑</text>
+      </view>
+      <view class="intro-card">
+        <text class="intro-text">{{scenic.playGuide}}</text>
+      </view>
+    </view>
+    <view class="section" wx:elif="{{!scenic.playGuide}}">
+      <view class="add-guide-btn" bindtap="onEditPlayGuide">+ 添加游玩方式</view>
+    </view>
+
+    <view style="height: 200rpx"></view>
+
+    <view class="footer-bar safe-bottom">
+      <view class="action-btn ghost" bindtap="onCopyIntro">复制介绍</view>
+      <button class="action-btn primary" open-type="share">分享给客户</button>
+    </view>
+  </block>
+</view>

@@ -1,0 +1,93 @@
+/* app.wxss - 智游策划师 全局样式 */
+
+/* ===== 主题色与变量 ===== */
+page {
+  --primary: #1BA0D7;
+  --primary-dark: #1781AC;
+  --primary-light: #E6F4FB;
+  --accent: #FF9F2C;
+  --success: #07C160;
+  --warning: #FAAD14;
+  --danger: #FF4D4F;
+  --text-1: #1A1A1A;
+  --text-2: #595959;
+  --text-3: #8C8C8C;
+  --text-4: #BFBFBF;
+  --bg-page: #F5F7FA;
+  --bg-card: #FFFFFF;
+  --border: #E9EBF0;
+
+  --radius-sm: 8rpx;
+  --radius-md: 16rpx;
+  --radius-lg: 24rpx;
+  --space-xs: 8rpx;
+  --space-sm: 16rpx;
+  --space-md: 24rpx;
+  --space-lg: 32rpx;
+  --space-xl: 48rpx;
+
+  background-color: var(--bg-page);
+  color: var(--text-1);
+  font-family: -apple-system, "Helvetica Neue", "PingFang SC", "Microsoft YaHei", sans-serif;
+  font-size: 28rpx;
+  line-height: 1.5;
+}
+
+/* ===== 通用工具类 ===== */
+.flex { display: flex; }
+.flex-1 { flex: 1; }
+.flex-between { display: flex; justify-content: space-between; align-items: center; }
+.flex-center { display: flex; justify-content: center; align-items: center; }
+.flex-col { display: flex; flex-direction: column; }
+.ellipsis { overflow: hidden; white-space: nowrap; text-overflow: ellipsis; }
+.ellipsis-2 {
+  overflow: hidden;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+}
+
+/* ===== 卡片 ===== */
+.card {
+  background: var(--bg-card);
+  border-radius: var(--radius-md);
+  padding: var(--space-md);
+  margin: var(--space-sm) var(--space-md);
+  box-shadow: 0 2rpx 12rpx rgba(27, 160, 215, 0.06);
+}
+
+/* ===== 阶段标签 ===== */
+.stage-tag {
+  display: inline-flex;
+  align-items: center;
+  padding: 4rpx 16rpx;
+  border-radius: 20rpx;
+  font-size: 22rpx;
+  line-height: 1.6;
+}
+
+/* ===== 按钮 ===== */
+.btn-primary {
+  background: var(--primary);
+  color: #fff;
+  border-radius: var(--radius-md);
+  padding: 20rpx 0;
+  text-align: center;
+  font-size: 30rpx;
+}
+.btn-primary:active { opacity: 0.85; }
+
+.btn-ghost {
+  background: var(--primary-light);
+  color: var(--primary);
+  border-radius: var(--radius-md);
+  padding: 20rpx 0;
+  text-align: center;
+  font-size: 30rpx;
+}
+
+/* ===== 安全区 ===== */
+.safe-bottom { padding-bottom: calc(env(safe-area-inset-bottom) + 20rpx); }
+
+/* 全局隐藏滚动条 */
+::-webkit-scrollbar { display: none; width: 0; height: 0; }

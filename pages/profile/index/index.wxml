@@ -1,0 +1,19 @@
+<!-- pages/profile/index/index.wxml - 我的（占位） -->
+<view class="page">
+  <view class="profile-hero">
+    <view class="avatar">{{userInfo.name ? userInfo.name[0] : '智'}}</view>
+    <view class="info">
+      <view class="name">{{userInfo.name || '未登录'}}</view>
+      <view class="role" wx:if="{{userInfo.role}}">
+        {{userInfo.role === 'admin' ? '管理员' : '定制师'}}
+      </view>
+    </view>
+  </view>
+  <view class="menu">
+    <view class="menu-item">
+      <text>关于智游策划师</text>
+      <text class="menu-val">v{{version}}</text>
+    </view>
+    <view class="menu-tip">个人中心模块开发中</view>
+  </view>
+</view>

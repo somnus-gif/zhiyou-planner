@@ -1,0 +1,85 @@
+<!-- pages/quote/detail/detail.wxml -->
+<view class="page" wx:if="{{pageState==='ready'}}">
+
+  <!-- 顶部信息卡 -->
+  <view class="hero-card">
+    <view class="hero-row">
+      <view class="hero-label">版本</view>
+      <view class="hero-version">v{{quote.version}}</view>
+      <view class="status-tag" style="color:{{statusColor}};background:{{statusColor}}1A;">{{statusLabel}}</view>
+    </view>
+    <view class="hero-summary">
+      <view class="hero-cell">
+        <view class="cell-label">售价合计</view>
+        <view class="cell-value">¥{{totalText}}</view>
+      </view>
+      <view class="hero-cell">
+        <view class="cell-label">成本合计</view>
+        <view class="cell-value">¥{{costTotalText}}</view>
+      </view>
+      <view class="hero-cell">
+        <view class="cell-label">利润</view>
+        <view class="cell-value profit">¥{{profitText}}</view>
+      </view>
+    </view>
+    <view class="hero-meta">
+      <text>更新于 {{updatedAtText}}</text>
+    </view>
+  </view>
+
+  <!-- 条目列表 -->
+  <view class="section">
+    <view class="section-title">报价条目（{{items.length}}）</view>
+    <view class="item-row" wx:for="{{items}}" wx:key="index">
+      <view class="item-line1">
+        <view class="item-type" style="color:#1BA0D7;background:#1BA0D714;">{{item.typeLabel}}</view>
+        <view class="item-name">{{item.name}}</view>
+        <view class="item-sub">¥{{item.subtotalText}}</view>
+      </view>
+      <view class="item-line2">
+        <text wx:if="{{item.spec}}" class="item-spec">{{item.spec}}</text>
+        <text class="item-detail">数量 {{item.qty}} · 售价 ¥{{item.priceText}}/份 · 成本 ¥{{item.costText}}/份</text>
+      </view>
+    </view>
+    <view class="empty-tip" wx:if="{{!items.length}}">暂无条目</view>
+  </view>
+
+  <!-- 议价历史 -->
+  <view class="section" wx:if="{{adjustHistory.length}}">
+    <view class="section-title">议价历史</view>
+    <view class="timeline">
+      <view class="tl-item" wx:for="{{adjustHistory}}" wx:key="index">
+        <view class="tl-dot"></view>
+        <view class="tl-content">
+          <view class="tl-line1">
+            <text class="tl-version">v{{item.version}}</text>
+            <text class="tl-total">¥{{item.totalText}}</text>
+          </view>
+          <view class="tl-reason">{{item.reason}}</view>
+          <view class="tl-time">{{item.tsText}}</view>
+        </view>
+      </view>
+    </view>
+  </view>
+
+  <!-- 操作按钮 -->
+  <view class="actions">
+    <button class="act-btn edit" bindtap="onEdit">编辑</button>
+    <button class="act-btn send" wx:if="{{quote.status==='draft' || quote.status==='bargaining'}}" bindtap="onSend">发送报价</button>
+    <button class="act-btn confirm" wx:if="{{quote.status==='sent' || quote.status==='bargaining'}}" bindtap="onConfirm">客户确认</button>
+    <button class="act-btn order" wx:if="{{quote.status==='confirmed'}}" bindtap="onCreateOrder">创建订单</button>
+    <button class="act-btn archive" wx:if="{{quote.status!=='archived'}}" bindtap="onArchive">归档</button>
+  </view>
+
+  <view class="safe-bottom"></view>
+</view>
+
+<view class="state-box" wx:elif="{{pageState==='loading'}}">
+  <view class="loading-text">加载中...</view>
+</view>
+
+<view class="state-box" wx:elif="{{pageState==='error'}}">
+  <view class="err-illu">!</view>
+  <view class="err-text">加载失败</view>
+  <view class="err-retry" bindtap="onRetry">点击重试</view>
+</view>

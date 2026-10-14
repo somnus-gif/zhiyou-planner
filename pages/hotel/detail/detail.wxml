@@ -1,0 +1,89 @@
+<!-- pages/hotel/detail/detail.wxml -->
+<view class="page">
+
+  <view class="state-box" wx:if="{{pageState==='loading'}}">
+    <view class="loading-text">加载中...</view>
+  </view>
+
+  <view class="state-box" wx:elif="{{pageState==='error'}}">
+    <view class="err-illu">!</view>
+    <view class="err-text">方案不存在或加载失败</view>
+    <view class="err-retry" bindtap="onRetry">点击重试</view>
+  </view>
+
+  <block wx:else>
+    <!-- 查询表单 -->
+    <view class="form-card">
+      <view class="form-title">{{mode === 'new' ? '新建酒店方案' : '修改查询条件'}}</view>
+      <view class="form-row">
+        <text class="form-label">目的地</text>
+        <input class="form-input" placeholder="如：巴厘岛" value="{{city}}" bindinput="onCityInput" />
+      </view>
+      <view class="form-row">
+        <text class="form-label">入住</text>
+        <picker mode="date" value="{{checkIn}}" bindchange="onCheckInChange">
+          <view class="form-picker">{{checkIn || '请选择'}}</view>
+        </picker>
+        <text class="form-label" style="margin-left: 24rpx">离店</text>
+        <picker mode="date" value="{{checkOut}}" bindchange="onCheckOutChange">
+          <view class="form-picker">{{checkOut || '请选择'}}</view>
+        </picker>
+      </view>
+      <view class="form-row">
+        <text class="form-label">房间数</text>
+        <input class="form-input short" type="number" value="{{rooms}}" bindinput="onRoomsChange" />
+        <text class="form-label" style="margin-left: 24rpx">预算</text>
+        <input class="form-input short" type="digit" placeholder="0" value="{{budget}}" bindinput="onBudgetInput" />
+        <text class="form-suffix">元</text>
+      </view>
+      <view class="form-row">
+        <text class="form-label">位置</text>
+        <input class="form-input" placeholder="如：库塔海滩附近" value="{{location}}" bindinput="onLocationInput" />
+      </view>
+      <button class="search-btn {{searching ? 'disabled' : ''}}" bindtap="onSearchTap" disabled="{{searching}}">{{searching ? '查询中...' : (mode === 'new' ? '查询酒店' : '重新搜索')}}</button>
+    </view>
+
+    <!-- 酒店列表 -->
+    <view class="hotel-list" wx:if="{{pageState === 'list'}}">
+      <view class="list-title">共 {{options.length}} 家酒店</view>
+
+      <view class="hotel-card {{selectedOption === index ? 'selected' : ''}}" wx:for="{{options}}" wx:key="index"
+            data-index="{{index}}" bindtap="onSelectTap">
+        <image wx:if="{{item.image}}" src="{{item.image}}" mode="aspectFill" class="hotel-cover"
+               data-url="{{item.image}}" catchtap="onPreviewImage" />
+        <view class="hotel-body">
+          <view class="hotel-name-row">
+            <text class="hotel-name">{{item.name}}</text>
+            <view class="star-wrap">
+              <text class="star-dot" wx:for="{{item.starDots}}" wx:for-item="dot" wx:key="*this">★</text>
+            </view>
+          </view>
+          <view class="hotel-meta">
+            <text class="room-type">{{item.roomType}}</text>
+            <text class="meta-sep">·</text>
+            <text class="meta-tag" wx:if="{{item.breakfast}}">含早</text>
+            <text class="meta-tag" wx:if="{{item.cancelable}}">免费取消</text>
+          </view>
+          <view class="hotel-facilities">
+            <text class="facility-chip" wx:for="{{item.facilities}}" wx:for-item="f" wx:key="*this">{{f}}</text>
+          </view>
+          <view class="hotel-intro" wx:if="{{item.intro}}">{{item.intro}}</view>
+          <view class="hotel-price-row">
+            <view class="price-block">
+              <text class="price-label">¥{{item.priceText}}/晚</text>
+              <text class="price-total">总价 ¥{{item.totalPriceText}}</text>
+            </view>
+            <view class="select-btn {{selectedOption === index ? 'active' : ''}}">{{selectedOption === index ? '已选' : '选择'}}</view>
+          </view>
+        </view>
+      </view>
+
+      <view class="footer-bar safe-bottom">
+        <view class="footer-btn delete" wx:if="{{mode === 'edit'}}" bindtap="onDeleteTap">删除</view>
+        <button class="footer-btn share" open-type="share">分享给客户</button>
+      </view>
+    </view>
+
+    <view style="height: 180rpx"></view>
+  </block>
+</view>

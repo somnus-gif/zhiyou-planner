@@ -1,0 +1,73 @@
+<!-- pages/order/preview/preview.wxml -->
+<view class="page">
+  <view class="state-box" wx:if="{{pageState==='loading'}}">
+    <view class="loading-text">加载中...</view>
+  </view>
+  <view class="state-box" wx:elif="{{pageState==='error'}}">
+    <view class="err-illu">!</view>
+    <view class="err-text">订单不存在或链接已失效</view>
+    <view class="err-retry" bindtap="onRetry">点击重试</view>
+  </view>
+
+  <block wx:else>
+    <view class="hero">
+      <view class="hero-status" style="color:{{statusColor}};background:{{statusColor}}1A;">{{statusLabel}}</view>
+      <view class="hero-amount">¥{{totalText}}</view>
+      <view class="hero-label">订单总额</view>
+    </view>
+
+    <view class="section-list">
+      <view class="section-card">
+        <view class="sec-head">
+          <text class="sec-title">定金</text>
+          <text class="sec-tag {{depositPaid?'tag-done':'tag-todo'}}">{{depositPaid?'已支付':'待支付'}}</text>
+        </view>
+        <view class="sec-time" wx:if="{{depositTime}}">支付时间：{{depositTime}}</view>
+      </view>
+
+      <view class="section-card">
+        <view class="sec-head">
+          <text class="sec-title">合同</text>
+          <text class="sec-tag {{contractSigned?'tag-done':'tag-todo'}}">{{contractSigned?'已签署':'待签署'}}</text>
+        </view>
+        <view class="sec-time" wx:if="{{contractTime}}">签署时间：{{contractTime}}</view>
+      </view>
+
+      <view class="section-card">
+        <view class="sec-head">
+          <text class="sec-title">尾款</text>
+          <text class="sec-tag {{balancePaid?'tag-done':'tag-todo'}}">{{balancePaid?'已支付':'待支付'}}</text>
+        </view>
+        <view class="sec-time" wx:if="{{balanceTime}}">支付时间：{{balanceTime}}</view>
+      </view>
+
+      <view class="section-card">
+        <view class="sec-head">
+          <text class="sec-title">预订进度</text>
+          <text class="sec-tag {{bookingDoneCount===4?'tag-done':'tag-todo'}}">{{bookingDoneCount}}/4</text>
+        </view>
+        <view class="check-grid">
+          <view class="check-item {{bookingHotel?'check-done':''}}">酒店</view>
+          <view class="check-item {{bookingFlight?'check-done':''}}">机票</view>
+          <view class="check-item {{bookingScenic?'check-done':''}}">门票</view>
+          <view class="check-item {{bookingGuide?'check-done':''}}">导游</view>
+        </view>
+      </view>
+
+      <view class="section-card">
+        <view class="sec-head">
+          <text class="sec-title">资料下发</text>
+          <text class="sec-tag {{docItinerary&&docCheckin&&docNotice?'tag-done':'tag-todo'}}">{{docItinerary&&docCheckin&&docNotice?'已下发':'待下发'}}</text>
+        </view>
+        <view class="check-grid">
+          <view class="check-item {{docItinerary?'check-done':''}}">行程单</view>
+          <view class="check-item {{docCheckin?'check-done':''}}">入住单</view>
+          <view class="check-item {{docNotice?'check-done':''}}">注意事项</view>
+        </view>
+      </view>
+    </view>
+
+    <view class="footer-tip">更新于 {{updatedAtText}}</view>
+    <view class="safe-bottom"></view>
+  </block>
+</view>

@@ -1,0 +1,98 @@
+<!-- pages/trip/editor/editor.wxml -->
+<view class="page">
+
+  <view class="state-box" wx:if="{{pageState==='loading'}}">
+    <view class="loading-text">加载中...</view>
+  </view>
+
+  <view class="state-box" wx:elif="{{pageState==='error'}}">
+    <view class="err-illu">!</view>
+    <view class="err-text">加载失败</view>
+    <view class="err-retry" bindtap="onRetry">点击重试</view>
+  </view>
+
+  <block wx:else>
+    <!-- 标题区 -->
+    <view class="title-card">
+      <view class="title-row">
+        <input class="title-input" placeholder="行程标题" value="{{title}}" bindinput="onTitleInput" />
+      </view>
+      <view class="sub-row" wx:if="{{customerName}}">
+        <text class="sub-label">客户</text>
+        <text class="sub-value">{{customerName}}</text>
+      </view>
+    </view>
+
+    <!-- 按天编排 -->
+    <view class="day-card" wx:for="{{days}}" wx:for-item="day" wx:for-index="dayIdx" wx:key="dayIdx">
+      <view class="day-header">
+        <view class="day-label">{{day.dateLabel}}</view>
+        <view class="day-city-input">
+          <input class="city-input" placeholder="城市" value="{{day.city}}" data-idx="{{dayIdx}}" data-field="city" bindinput="onDayInput" />
+        </view>
+        <view class="day-del" data-idx="{{dayIdx}}" bindtap="onRemoveDay">删除</view>
+      </view>
+
+      <!-- 当天项目 -->
+      <view class="items-box">
+        <view class="item-row" wx:for="{{day.items}}" wx:for-item="item" wx:for-index="itemIdx" wx:key="itemIdx">
+          <view class="item-type-tag type-{{item.type}}">{{item.typeLabel}}</view>
+          <view class="item-main">
+            <view class="item-name" wx:if="{{item.type==='scenic'}}">{{item.name}}</view>
+            <input class="item-name-input" wx:elif="{{item.type!=='hotel'}}" placeholder="{{item.typeLabel}}说明" value="{{item.name}}" data-day-idx="{{dayIdx}}" data-item-idx="{{itemIdx}}" bindinput="onItemNameInput" />
+            <view class="hotel-link-row" wx:else>
+              <input class="item-name-input" placeholder="住宿说明" value="{{item.name}}" data-day-idx="{{dayIdx}}" data-item-idx="{{itemIdx}}" bindinput="onItemNameInput" />
+              <view class="link-hotel-btn {{item.refId ? 'linked' : ''}}" data-day-idx="{{dayIdx}}" data-item-idx="{{itemIdx}}" bindtap="onLinkHotel">{{item.refId ? '已关联' : '关联酒店方案'}}</view>
+            </view>
+            <input class="item-note-input" placeholder="备注（可选）" value="{{item.note}}" data-day-idx="{{dayIdx}}" data-item-idx="{{itemIdx}}" bindinput="onItemNoteInput" />
+          </view>
+          <view class="item-actions">
+            <view class="move-btn" data-day-idx="{{dayIdx}}" data-item-idx="{{itemIdx}}" data-dir="up" bindtap="onMoveItem">↑</view>
+            <view class="move-btn" data-day-idx="{{dayIdx}}" data-item-idx="{{itemIdx}}" data-dir="down" bindtap="onMoveItem">↓</view>
+            <view class="move-btn del" data-day-idx="{{dayIdx}}" data-item-idx="{{itemIdx}}" bindtap="onRemoveItem">×</view>
+          </view>
+        </view>
+        <view class="empty-items" wx:if="{{!day.items.length}}">暂无项目，点击下方按钮添加</view>
+      </view>
+
+      <!-- 添加项目 -->
+      <view class="add-row">
+        <view class="add-btn primary" data-day-idx="{{dayIdx}}" bindtap="onOpenScenicPicker">+ 景点</view>
+        <view class="add-btn" data-day-idx="{{dayIdx}}" data-type="transport" bindtap="onAddCustomItem">+ 交通</view>
+        <view class="add-btn" data-day-idx="{{dayIdx}}" data-type="meal" bindtap="onAddCustomItem">+ 餐食</view>
+        <view class="add-btn" data-day-idx="{{dayIdx}}" data-type="hotel" bindtap="onAddCustomItem">+ 住宿</view>
+        <view class="add-btn" data-day-idx="{{dayIdx}}" data-type="custom" bindtap="onAddCustomItem">+ 自定义</view>
+      </view>
+    </view>
+
+    <view class="add-day-btn" bindtap="onAddDay">+ 添加一天</view>
+
+    <view style="height: 180rpx"></view>
+
+    <!-- 底部保存栏 -->
+    <view class="footer-bar safe-bottom">
+      <view class="footer-btn preview" bindtap="onPreview">预览</view>
+      <view class="footer-btn save {{saving ? 'disabled' : ''}}" bindtap="onSave">{{saving ? '保存中...' : '保存'}}</view>
+    </view>
+
+    <!-- 景点选择弹窗 -->
+    <view class="picker-mask" wx:if="{{scenicPickerShow}}" bindtap="onCloseScenicPicker"></view>
+    <view class="picker-panel {{scenicPickerShow ? 'show' : ''}}" wx:if="{{scenicPickerShow}}">
+      <view class="picker-header">
+        <text class="picker-title">选择景点</text>
+        <text class="picker-close" bindtap="onCloseScenicPicker">×</text>
+      </view>
+      <view class="picker-search">
+        <input class="picker-search-input" placeholder="搜索景点名称" value="{{scenicKeyword}}" bindinput="onScenicKeywordInput" confirm-type="search" bindconfirm="onSearchScenic" />
+        <view class="picker-search-btn" bindtap="onSearchScenic">{{scenicPicking ? '...' : '搜索'}}</view>
+      </view>
+      <scroll-view scroll-y class="picker-list">
+        <view class="picker-item" wx:for="{{scenicOptions}}" wx:key="_id" data-scenic="{{item}}" bindtap="onPickScenic">
+          <view class="picker-item-name">{{item.name}}</view>
+          <view class="picker-item-meta">{{item.city || '未分类'}}</view>
+        </view>
+        <view class="picker-empty" wx:if="{{!scenicOptions.length}}">输入关键词搜索景点</view>
+      </scroll-view>
+    </view>
+  </block>
+</view>

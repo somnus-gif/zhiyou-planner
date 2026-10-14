@@ -1,0 +1,103 @@
+<!-- pages/flight/query/query.wxml -->
+<view class="page">
+  <view class="state-box" wx:if="{{pageState==='loading'}}">
+    <view class="loading-text">加载中...</view>
+  </view>
+
+  <view class="state-box" wx:elif="{{pageState==='error'}}">
+    <view class="err-illu">!</view>
+    <view class="err-text">加载失败</view>
+    <view class="err-retry" bindtap="onRetry">点击重试</view>
+  </view>
+
+  <block wx:else>
+    <view class="form-card">
+      <view class="trip-type-row">
+        <view class="tt-item {{tripType===item.key?'tt-on':''}}"
+              wx:for="{{tripTypes}}" wx:key="key"
+              data-key="{{item.key}}" bindtap="onTripTypeTap">{{item.label}}</view>
+      </view>
+
+      <view class="route-row">
+        <view class="route-col">
+          <text class="route-label">出发</text>
+          <picker range="{{airportOptions}}" range-key="name" bindchange="onFromChange">
+            <view class="route-code {{from?'':'placeholder'}}">{{from||'请选择'}}</view>
+          </picker>
+        </view>
+        <view class="swap-btn" bindtap="onSwapTap">换</view>
+        <view class="route-col">
+          <text class="route-label">到达</text>
+          <picker range="{{airportOptions}}" range-key="name" bindchange="onToChange">
+            <view class="route-code {{to?'':'placeholder'}}">{{to||'请选择'}}</view>
+          </picker>
+        </view>
+      </view>
+
+      <view class="date-row">
+        <view class="date-col">
+          <text class="date-label">出发日期</text>
+          <picker mode="date" value="{{fromDate}}" bindchange="onFromDateChange">
+            <view class="date-val {{fromDate?'':'placeholder'}}">{{fromDate||'请选择'}}</view>
+          </picker>
+        </view>
+        <view class="date-col" wx:if="{{tripType==='rt'}}">
+          <text class="date-label">返程日期</text>
+          <picker mode="date" value="{{retDate}}" bindchange="onRetDateChange">
+            <view class="date-val {{retDate?'':'placeholder'}}">{{retDate||'请选择'}}</view>
+          </picker>
+        </view>
+      </view>
+
+      <view class="search-btn {{searching?'disabled':''}}" bindtap="onSearchTap">
+        {{searching ? '查询中...' : (mode==='new'?'开始查询':'重新搜索')}}
+      </view>
+    </view>    <view class="result-area" wx:if="{{pageState==='list'}}">
+      <view class="result-head">
+        <text class="result-title">共 {{options.length}} 条航班</text>
+        <text class="result-tip" wx:if="{{options.length}}">按总价升序，点击选中</text>
+      </view>
+
+      <view class="flight-empty" wx:if="{{!options.length}}">
+        <view class="empty-illu">无</view>
+        <view class="empty-text">未查询到航班</view>
+      </view>
+
+      <view class="flight-card {{selectedOption===index?'selected':''}}"
+            wx:for="{{options}}" wx:key="flightNo"
+            data-index="{{index}}" bindtap="onSelectTap">
+        <view class="flight-head">
+          <text class="airline">{{item.airline}} {{item.flightNo}}</text>
+          <view class="price-box">
+            <text class="price-symbol">¥</text>
+            <text class="price-num">{{item.totalText}}</text>
+          </view>
+        </view>
+        <view class="time-row">
+          <view class="time-col">
+            <text class="time-val">{{item.depTime}}</text>
+            <text class="airport-name">{{item.depAirport}}</text>
+          </view>
+          <view class="time-arrow">→</view>
+          <view class="time-col">
+            <text class="time-val">{{item.arrTime}}</text>
+            <text class="airport-name">{{item.arrAirport}}</text>
+          </view>
+        </view>
+        <view class="meta-row">
+          <text class="meta-tag">{{item.cabin}}</text>
+          <text class="meta-tag">{{item.aircraft}}</text>
+          <text class="meta-tag">{{item.discount}}</text>
+          <text class="meta-stock">余票 {{item.stock}}</text>
+        </view>
+        <view class="selected-flag" wx:if="{{selectedOption===index}}">已选</view>
+      </view>
+    </view>
+
+    <view class="action-bar" wx:if="{{mode==='edit'}}">
+      <view class="btn btn-danger-outline" bindtap="onDeleteTap">删除查询</view>
+    </view>
+
+    <view class="safe-bottom"></view>
+  </block>
+</view>

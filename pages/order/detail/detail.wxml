@@ -1,0 +1,118 @@
+<!-- pages/order/detail/detail.wxml -->
+<view class="page">
+  <view class="state-box" wx:if="{{pageState==='loading'}}">
+    <view class="loading-text">加载中...</view>
+  </view>
+  <view class="state-box" wx:elif="{{pageState==='error'}}">
+    <view class="err-illu">!</view>
+    <view class="err-text">订单加载失败</view>
+  </view>
+
+  <block wx:else>
+    <view class="hero">
+      <view class="hero-status" style="color:{{statusColor}};background:{{statusColor}}1A;">{{statusLabel}}</view>
+      <view class="hero-amount">¥{{totalText}}</view>
+      <view class="hero-label">订单总额</view>
+    </view>
+
+    <view class="share-bar">
+      <button class="share-btn" open-type="share">分享给客户</button>
+      <text class="refresh-link" bindtap="onRefreshShare">重置链接</text>
+    </view>
+
+    <view class="timeline">
+      <view class="tl-section">
+        <view class="tl-line"></view>
+        <view class="tl-dot {{depositTime?'dot-done':'dot-todo'}}"></view>
+        <view class="tl-card">
+          <view class="tl-head">
+            <text class="tl-title">定金</text>
+            <text class="tl-tag {{depositTime?'tag-done':'tag-todo'}}">{{depositTime?'已记录':'待支付'}}</text>
+          </view>
+          <view class="tl-body" wx:if="{{depositTime}}">
+            <view class="tl-row"><text class="row-label">金额</text><text class="row-val">¥{{depositText}}</text></view>
+            <view class="tl-row" wx:if="{{depositMethod}}"><text class="row-label">方式</text><text class="row-val">{{depositMethod}}</text></view>
+            <view class="tl-row"><text class="row-label">时间</text><text class="row-val">{{depositTime}}</text></view>
+            <image wx:if="{{depositVoucher}}" class="tl-thumb" src="{{depositVoucher}}" data-url="{{depositVoucher}}" bindtap="onPreviewVoucher" mode="aspectFill"/>
+          </view>
+          <view class="tl-btn" wx:if="{{isInProgress}}" bindtap="onPayDeposit">{{depositTime?'修改定金':'记录定金'}}</view>
+        </view>
+      </view>
+      <view class="tl-section">
+        <view class="tl-line"></view>
+        <view class="tl-dot {{contractSigned?'dot-done':'dot-todo'}}"></view>
+        <view class="tl-card">
+          <view class="tl-head">
+            <text class="tl-title">合同</text>
+            <text class="tl-tag {{contractSigned?'tag-done':'tag-todo'}}">{{contractSigned?'已签署':'待签署'}}</text>
+          </view>
+          <view class="tl-body" wx:if="{{contractSigned}}">
+            <view class="tl-row" wx:if="{{contractNo}}"><text class="row-label">合同号</text><text class="row-val">{{contractNo}}</text></view>
+            <view class="tl-row"><text class="row-label">签署时间</text><text class="row-val">{{contractTime}}</text></view>
+            <image wx:if="{{contractFile}}" class="tl-thumb" src="{{contractFile}}" bindtap="onPreviewContract" mode="aspectFill"/>
+          </view>
+          <view class="tl-btn" wx:if="{{isInProgress}}" bindtap="onSignContract">{{contractSigned?'重签':'签署合同'}}</view>
+        </view>
+      </view>
+
+      <view class="tl-section">
+        <view class="tl-line"></view>
+        <view class="tl-dot {{balanceTime?'dot-done':'dot-todo'}}"></view>
+        <view class="tl-card">
+          <view class="tl-head">
+            <text class="tl-title">尾款</text>
+            <text class="tl-tag {{balanceTime?'tag-done':'tag-todo'}}">{{balanceTime?'已记录':'待支付'}}</text>
+          </view>
+          <view class="tl-body" wx:if="{{balanceTime}}">
+            <view class="tl-row"><text class="row-label">金额</text><text class="row-val">¥{{balanceText}}</text></view>
+            <view class="tl-row" wx:if="{{balanceMethod}}"><text class="row-label">方式</text><text class="row-val">{{balanceMethod}}</text></view>
+            <view class="tl-row"><text class="row-label">时间</text><text class="row-val">{{balanceTime}}</text></view>
+            <image wx:if="{{balanceVoucher}}" class="tl-thumb" src="{{balanceVoucher}}" data-url="{{balanceVoucher}}" bindtap="onPreviewVoucher" mode="aspectFill"/>
+          </view>
+          <view class="tl-btn" wx:if="{{isInProgress}}" bindtap="onPayBalance">{{balanceTime?'修改尾款':'记录尾款'}}</view>
+        </view>
+      </view>
+
+      <view class="tl-section">
+        <view class="tl-line"></view>
+        <view class="tl-dot {{bookingDoneCount===4?'dot-done':'dot-todo'}}"></view>
+        <view class="tl-card">
+          <view class="tl-head">
+            <text class="tl-title">预订</text>
+            <text class="tl-tag {{bookingDoneCount===4?'tag-done':'tag-todo'}}">{{bookingDoneCount}}/4</text>
+          </view>
+          <view class="booking-grid">
+            <view class="booking-item {{bookingHotel?'bk-done':''}}" data-key="hotel" bindtap="onToggleBooking">酒店</view>
+            <view class="booking-item {{bookingFlight?'bk-done':''}}" data-key="flight" bindtap="onToggleBooking">机票</view>
+            <view class="booking-item {{bookingScenic?'bk-done':''}}" data-key="scenic" bindtap="onToggleBooking">门票</view>
+            <view class="booking-item {{bookingGuide?'bk-done':''}}" data-key="guide" bindtap="onToggleBooking">导游</view>
+          </view>
+        </view>
+      </view>
+      <view class="tl-section">
+        <view class="tl-dot {{docItinerary&&docCheckin&&docNotice?'dot-done':'dot-todo'}}"></view>
+        <view class="tl-card">
+          <view class="tl-head">
+            <text class="tl-title">资料下发</text>
+            <text class="tl-tag {{docItinerary&&docCheckin&&docNotice?'tag-done':'tag-todo'}}">{{docSentTime?'已下发':'待下发'}}</text>
+          </view>
+          <view class="booking-grid">
+            <view class="booking-item {{docItinerary?'bk-done':''}}" data-key="itinerary" bindtap="onToggleDoc">行程单</view>
+            <view class="booking-item {{docCheckin?'bk-done':''}}" data-key="checkin" bindtap="onToggleDoc">入住单</view>
+            <view class="booking-item {{docNotice?'bk-done':''}}" data-key="notice" bindtap="onToggleDoc">注意事项</view>
+          </view>
+          <view class="tl-row" wx:if="{{docSentTime}}"><text class="row-label">下发时间</text><text class="row-val">{{docSentTime}}</text></view>
+        </view>
+      </view>
+    </view>
+
+    <view class="action-bar" wx:if="{{isInProgress}}">
+      <view class="btn btn-danger" bindtap="onCancel">取消订单</view>
+      <view class="btn btn-primary" bindtap="onComplete">完成订单</view>
+    </view>
+    <view class="action-bar" wx:if="{{!isInProgress}}">
+      <view class="btn btn-danger-outline" bindtap="onRemove">删除订单</view>
+    </view>
+    <view class="safe-bottom"></view>
+  </block>
+</view>

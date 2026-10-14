@@ -1,0 +1,16 @@
+# 依赖
+node_modules/
+
+# 小程序开发者工具本地隐私配置（含个人 IDE 设置，官方建议忽略）
+project.private.config.json
+
+# 日志与缓存
+*.log
+npm-debug.log*
+yarn-error.log*
+
+# 编辑器 / 系统文件
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db

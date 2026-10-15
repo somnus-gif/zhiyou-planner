@@ -1,0 +1,95 @@
+<!-- pages/scenic/edit/edit.wxml - 景点信息编辑 -->
+<view class="page">
+  <view class="form">
+
+    <view class="field">
+      <view class="label">景点名称 <text class="req">*</text></view>
+      <input class="input" placeholder="如：美人鱼岛" value="{{form.name}}" data-field="name" bindinput="onInput" />
+    </view>
+
+    <view class="field-row">
+      <view class="field half">
+        <view class="label">城市</view>
+        <input class="input" placeholder="如：马来西亚" value="{{form.city}}" data-field="city" bindinput="onInput" />
+      </view>
+      <view class="field half">
+        <view class="label">省份 / 地区</view>
+        <input class="input" placeholder="如：亚庇" value="{{form.province}}" data-field="province" bindinput="onInput" />
+      </view>
+    </view>
+
+    <view class="field">
+      <view class="label">详细地址</view>
+      <input class="input" placeholder="选填" value="{{form.address}}" data-field="address" bindinput="onInput" />
+    </view>
+
+    <view class="field-row">
+      <view class="field half">
+        <view class="label">门票（元）</view>
+        <input class="input" type="digit" placeholder="0 表示免费" value="{{form.ticketPrice}}" data-field="ticketPrice" bindinput="onInput" />
+      </view>
+      <view class="field half">
+        <view class="label">建议时长（小时）</view>
+        <input class="input" type="digit" placeholder="如：3" value="{{form.duration}}" data-field="duration" bindinput="onInput" />
+      </view>
+    </view>
+
+    <view class="field">
+      <view class="label">开放时间</view>
+      <input class="input" placeholder="如：08:00-18:00" value="{{form.openHours}}" data-field="openHours" bindinput="onInput" />
+    </view>
+
+    <view class="field">
+      <view class="label">封面图</view>
+      <view class="cover-box">
+        <image wx:if="{{form.coverImage}}" src="{{form.coverImage}}" mode="aspectFill" class="cover-img" />
+        <view wx:else class="cover-empty">暂无封面</view>
+      </view>
+      <view class="cover-actions">
+        <view class="mini-btn" bindtap="onUploadCover">{{form.coverImage ? '重新上传' : '上传封面'}}</view>
+        <view class="mini-btn danger" wx:if="{{form.coverImage}}" bindtap="onRemoveCover">移除</view>
+      </view>
+    </view>
+
+    <view class="field">
+      <view class="label">景点亮点（逗号或换行分隔）</view>
+      <textarea class="textarea" placeholder="如：浮潜，私家海滩，玻璃船" value="{{form.highlightsText}}" data-field="highlightsText" bindinput="onInput" auto-height maxlength="-1" />
+    </view>
+
+    <view class="field">
+      <view class="label">适合人群</view>
+      <view class="chip-wrap">
+        <view class="chip {{item.on ? 'active' : ''}}" wx:for="{{suitableOptions}}" wx:key="label"
+              data-field="suitableFor" data-label="{{item.label}}" bindtap="onMultiTap">{{item.label}}</view>
+      </view>
+    </view>
+
+    <view class="field">
+      <view class="label-row">
+        <view class="label">标签</view>
+        <text class="add-link" bindtap="onAddCustomTag">+ 自定义</text>
+      </view>
+      <view class="chip-wrap">
+        <view class="chip {{item.on ? 'active' : ''}}" wx:for="{{tagOptions}}" wx:key="label"
+              data-field="tags" data-label="{{item.label}}" bindtap="onMultiTap">{{item.label}}</view>
+      </view>
+    </view>
+
+    <view class="field">
+      <view class="label">景点介绍</view>
+      <textarea class="textarea" placeholder="填写景点介绍" value="{{form.intro}}" data-field="intro" bindinput="onInput" auto-height maxlength="-1" />
+    </view>
+
+    <view class="field">
+      <view class="label">游玩方式</view>
+      <textarea class="textarea" placeholder="如：建议上午前往，光线最佳……" value="{{form.playGuide}}" data-field="playGuide" bindinput="onInput" auto-height maxlength="-1" />
+    </view>
+
+  </view>
+
+  <view class="footer-bar">
+    <view class="action-btn ghost danger" wx:if="{{isEdit}}" bindtap="onDelete">下架景点</view>
+    <button class="action-btn primary" loading="{{submitting}}" bindtap="onSubmit">{{isEdit ? '保存修改' : '创建景点'}}</button>
+  </view>
+  <view class="safe-bottom"></view>
+</view>

@@ -204,7 +204,7 @@ Page({
     const token = t.shareToken || this.data.shareToken;
     return {
       title: t.title || '行程预览',
-      path: '/pages/trip/preview/preview?shareToken=' + (token || '')
+      path: '/pages/trip/showcase/showcase?shareToken=' + (token || '')
     };
   },
 

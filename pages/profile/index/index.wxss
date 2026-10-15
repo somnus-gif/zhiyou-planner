@@ -1,5 +1,5 @@
-/* pages/profile/index/index.wxss - 我的（占位） */
-.page { min-height: 100vh; }
+/* pages/profile/index/index.wxss - 我的 */
+.page { min-height: 100vh; background: #F2F5F8; }
 
 .profile-hero {
   background: linear-gradient(135deg, #1BA0D7 0%, #1781AC 100%);
@@ -17,17 +17,33 @@
 .name { font-size: 38rpx; font-weight: 600; }
 .role { font-size: 24rpx; opacity: 0.85; margin-top: 8rpx; }
 
-.menu {
-  margin: 32rpx;
+.stats-card {
+  display: flex;
+  margin: 24rpx 32rpx 0;
   background: #fff;
   border-radius: 16rpx;
-  padding: 12rpx 24rpx;
+  padding: 28rpx 0;
+  box-shadow: 0 4rpx 16rpx rgba(0,0,0,0.04);
+}
+.stat-item { flex: 1; text-align: center; }
+.stat-num { font-size: 40rpx; font-weight: 600; color: #1BA0D7; }
+.stat-label { font-size: 22rpx; color: #8C8C8C; margin-top: 8rpx; }
+
+.menu {
+  margin: 24rpx 32rpx;
+  background: #fff;
+  border-radius: 16rpx;
+  padding: 0 24rpx;
 }
 .menu-item {
   display: flex; justify-content: space-between; align-items: center;
   padding: 28rpx 0;
   font-size: 28rpx;
+  color: #1A1A1A;
   border-bottom: 1rpx solid #F0F2F5;
 }
+.menu-item-last { border-bottom: none; }
 .menu-val { color: #8C8C8C; font-size: 26rpx; }
-.menu-tip { padding: 24rpx 0; font-size: 24rpx; color: #BFBFBF; text-align: center; }
+.menu-arrow { color: #C4CCD4; font-size: 32rpx; }
+
+.profile-footer { text-align: center; font-size: 22rpx; color: #BFBFBF; margin: 40rpx 0 60rpx; }

@@ -1,0 +1,1000 @@
+/* pages/trip/showcase/showcase.wxss - 行程展示页（海报风格） */
+
+.page {
+  padding-bottom: 0;
+  background: #F2F5F8;
+}
+
+/* ===== 状态页 ===== */
+.state-box {
+  padding: 200rpx 48rpx;
+  text-align: center;
+  color: #8C8C8C;
+}
+.loading-spinner {
+  width: 60rpx;
+  height: 60rpx;
+  margin: 0 auto 24rpx;
+  border: 4rpx solid #E6F4FB;
+  border-top-color: #1BA0D7;
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+}
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+.loading-text { font-size: 28rpx; color: #8C8C8C; }
+.err-illu {
+  width: 100rpx; height: 100rpx; line-height: 100rpx;
+  margin: 0 auto 24rpx;
+  border-radius: 50%;
+  background: #FFF1F0; color: #FF4D4F;
+  font-size: 52rpx; font-weight: 700;
+}
+.err-text { font-size: 30rpx; color: #595959; margin-bottom: 12rpx; }
+.err-msg { font-size: 24rpx; color: #FF4D4F; margin-bottom: 12rpx; padding: 0 40rpx; text-align: center; }
+.err-tip { font-size: 24rpx; color: #8C8C8C; margin-bottom: 24rpx; }
+.err-retry {
+  display: inline-block;
+  padding: 16rpx 48rpx;
+  border: 2rpx solid #E9EBF0;
+  border-radius: 48rpx;
+  color: #595959; font-size: 28rpx;
+}
+
+/* ===== Hero 区域 ===== */
+.hero {
+  position: relative;
+  height: 560rpx;
+  overflow: hidden;
+}
+.hero-img { width: 100%; height: 100%; display: block; }
+.hero-img-ph {
+  background: linear-gradient(135deg, #0F7BA6 0%, #1BA0D7 50%, #5BC2E7 100%);
+}
+.hero-overlay {
+  position: absolute; inset: 0;
+  background: linear-gradient(180deg, rgba(15,60,90,0.15) 0%, rgba(15,60,90,0.55) 60%, rgba(15,60,90,0.75) 100%);
+}
+.hero-decor {
+  position: absolute;
+  border-radius: 50%;
+  background: rgba(255,255,255,0.08);
+}
+.hero-decor-1 {
+  width: 300rpx; height: 300rpx;
+  top: -80rpx; right: -60rpx;
+}
+.hero-decor-2 {
+  width: 200rpx; height: 200rpx;
+  bottom: 100rpx; left: -50rpx;
+}
+.hero-inner {
+  position: absolute;
+  left: 40rpx; right: 40rpx;
+  bottom: 80rpx;
+  color: #fff;
+  z-index: 2;
+}
+.hero-badge {
+  display: flex;
+  align-items: center;
+  margin-bottom: 20rpx;
+}
+.badge-line {
+  width: 40rpx;
+  height: 2rpx;
+  background: rgba(255,255,255,0.6);
+}
+.badge-text {
+  margin: 0 20rpx;
+  font-size: 22rpx;
+  letter-spacing: 6rpx;
+  opacity: 0.9;
+}
+.hero-title {
+  font-size: 56rpx;
+  font-weight: 800;
+  line-height: 1.25;
+  letter-spacing: 1rpx;
+  text-shadow: 0 4rpx 20rpx rgba(0,0,0,0.3);
+}
+.hero-subtitle {
+  margin-top: 16rpx;
+  font-size: 26rpx;
+  opacity: 0.9;
+  letter-spacing: 2rpx;
+}
+.hero-meta-row {
+  display: flex;
+  flex-wrap: wrap;
+  margin-top: 28rpx;
+  gap: 16rpx;
+}
+.meta-chip {
+  display: flex;
+  align-items: center;
+  padding: 10rpx 20rpx;
+  background: rgba(255,255,255,0.2);
+  backdrop-filter: blur(10rpx);
+  border-radius: 32rpx;
+  font-size: 24rpx;
+}
+.meta-icon { margin-right: 8rpx; font-size: 22rpx; }
+.meta-text { opacity: 0.95; }
+.hero-wave {
+  position: absolute;
+  left: 0; right: 0; bottom: -2rpx;
+  height: 60rpx;
+  z-index: 3;
+  overflow: hidden;
+}
+.wave-shape {
+  width: 100%;
+  height: 100%;
+  background: #F2F5F8;
+  border-radius: 50% 50% 0 0 / 100% 100% 0 0;
+  transform: scaleX(1.5);
+  transform-origin: center bottom;
+}
+
+/* ===== 快速操作栏 ===== */
+.action-bar {
+  display: flex;
+  margin: -30rpx 24rpx 0;
+  background: #fff;
+  border-radius: 24rpx;
+  padding: 24rpx 0;
+  box-shadow: 0 8rpx 32rpx rgba(27,160,215,0.12);
+  position: relative;
+  z-index: 10;
+}
+.action-btn {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8rpx;
+  background: transparent;
+  border: none;
+  padding: 0;
+  margin: 0;
+  line-height: normal;
+}
+.action-btn::after { border: none; }
+.action-btn:active { opacity: 0.7; }
+.action-btn-primary .action-icon {
+  background: linear-gradient(135deg, #0F7BA6, #1BA0D7);
+  color: #fff;
+}
+.action-icon {
+  width: 80rpx;
+  height: 80rpx;
+  line-height: 80rpx;
+  text-align: center;
+  border-radius: 50%;
+  background: #F0F7FF;
+  color: #1BA0D7;
+  font-size: 36rpx;
+}
+.action-text {
+  font-size: 24rpx;
+  color: #1A1A1A;
+  font-weight: 500;
+}
+
+/* ===== 通用卡片 ===== */
+.section-card {
+  margin: 24rpx;
+  background: #fff;
+  border-radius: 24rpx;
+  padding: 32rpx 28rpx;
+  box-shadow: 0 4rpx 24rpx rgba(15,60,90,0.06);
+}
+.card-tag {
+  display: inline-block;
+  padding: 6rpx 18rpx;
+  background: #E6F4FB;
+  color: #1BA0D7;
+  font-size: 22rpx;
+  font-weight: 600;
+  border-radius: 8rpx;
+  margin-bottom: 16rpx;
+}
+.card-tag-orange { background: #FFF1DF; color: #FF9F2C; }
+.card-tag-purple { background: #F0EBFF; color: #7C5CD6; }
+.card-tag-green { background: #E7F6EC; color: #07C160; }
+.card-tag-blue { background: #E8F3FF; color: #2E6BE6; }
+.card-title {
+  font-size: 36rpx;
+  font-weight: 700;
+  color: #1A1A1A;
+  margin-bottom: 8rpx;
+}
+.card-sub {
+  font-size: 26rpx;
+  color: #8C8C8C;
+  margin-bottom: 24rpx;
+}
+
+/* ===== 行程亮点 ===== */
+.intro-card {
+  background: linear-gradient(135deg, #F0F7FF 0%, #E6F4FB 100%);
+}
+.intro-title {
+  font-size: 34rpx;
+  font-weight: 700;
+  color: #1A1A1A;
+  margin-bottom: 16rpx;
+}
+.intro-text {
+  font-size: 28rpx;
+  color: #595959;
+  line-height: 1.8;
+}
+
+/* ===== 目的地路线 ===== */
+.route-flow {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 8rpx;
+}
+.route-node {
+  display: flex;
+  align-items: center;
+}
+.route-dot {
+  width: 16rpx;
+  height: 16rpx;
+  border-radius: 50%;
+  background: #1BA0D7;
+  margin-right: 10rpx;
+  box-shadow: 0 0 0 6rpx #E6F4FB;
+}
+.route-dot.start { background: #FF9F2C; box-shadow: 0 0 0 6rpx #FFF1DF; }
+.route-dot.end { background: #07C160; box-shadow: 0 0 0 6rpx #E7F6EC; }
+.route-city {
+  font-size: 30rpx;
+  font-weight: 600;
+  color: #1A1A1A;
+}
+.route-arrow {
+  color: #1BA0D7;
+  font-size: 28rpx;
+  margin: 0 4rpx;
+}
+
+/* ===== 接机服务 ===== */
+.pickup-hero {
+  display: flex;
+  align-items: center;
+  padding: 28rpx;
+  background: linear-gradient(135deg, #0F7BA6 0%, #1BA0D7 100%);
+  border-radius: 20rpx;
+  color: #fff;
+  margin-bottom: 24rpx;
+}
+.pickup-icon-box {
+  width: 80rpx;
+  height: 80rpx;
+  line-height: 80rpx;
+  text-align: center;
+  background: rgba(255,255,255,0.2);
+  border-radius: 50%;
+  font-size: 40rpx;
+  margin-right: 20rpx;
+}
+.pickup-hero-text { flex: 1; }
+.pickup-slogan {
+  font-size: 32rpx;
+  font-weight: 700;
+  letter-spacing: 2rpx;
+}
+.pickup-sub {
+  font-size: 24rpx;
+  opacity: 0.85;
+  margin-top: 6rpx;
+}
+.pickup-info-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20rpx 0;
+}
+.info-item {
+  width: 50%;
+  padding-right: 10rpx;
+  box-sizing: border-box;
+}
+.info-label {
+  font-size: 24rpx;
+  color: #8C8C8C;
+  margin-bottom: 8rpx;
+}
+.info-value {
+  font-size: 28rpx;
+  color: #1A1A1A;
+  font-weight: 500;
+}
+.info-value-highlight {
+  color: #1BA0D7;
+  font-weight: 700;
+  letter-spacing: 1rpx;
+}
+
+.driver-card {
+  display: flex;
+  align-items: center;
+  margin-top: 24rpx;
+  padding: 24rpx;
+  background: #F6FAFE;
+  border-radius: 16rpx;
+}
+.driver-avatar {
+  width: 88rpx;
+  height: 88rpx;
+  line-height: 88rpx;
+  text-align: center;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #0F7BA6, #1BA0D7);
+  color: #fff;
+  font-size: 36rpx;
+  font-weight: 700;
+}
+.driver-info {
+  flex: 1;
+  margin-left: 20rpx;
+}
+.driver-name {
+  font-size: 30rpx;
+  font-weight: 600;
+  color: #1A1A1A;
+}
+.driver-tags {
+  margin-top: 8rpx;
+  display: flex;
+  gap: 12rpx;
+}
+.driver-tag {
+  font-size: 20rpx;
+  color: #1BA0D7;
+  background: #E6F4FB;
+  padding: 4rpx 12rpx;
+  border-radius: 6rpx;
+}
+.driver-call-btn {
+  width: 72rpx;
+  height: 72rpx;
+  line-height: 72rpx;
+  text-align: center;
+  background: #07C160;
+  border-radius: 50%;
+  font-size: 32rpx;
+}
+.driver-call-btn:active { opacity: 0.8; }
+
+.pickup-note-box {
+  display: flex;
+  margin-top: 20rpx;
+  padding: 20rpx 24rpx;
+  background: #FFF7ED;
+  border-radius: 12rpx;
+  border-left: 6rpx solid #FF9F2C;
+}
+.note-icon { margin-right: 14rpx; font-size: 28rpx; flex-shrink: 0; }
+.note-content {
+  font-size: 26rpx;
+  color: #8C6020;
+  line-height: 1.6;
+}
+
+/* ===== 酒店安排 ===== */
+.hotel-card {
+  display: flex;
+  background: #FAFBFC;
+  border-radius: 20rpx;
+  overflow: hidden;
+  margin-bottom: 20rpx;
+  border: 1rpx solid #F0F2F5;
+}
+.hotel-card:last-child { margin-bottom: 0; }
+.hotel-card.hotel-tap:active { opacity: 0.85; }
+.hotel-cover-wrap {
+  position: relative;
+  width: 260rpx;
+  flex-shrink: 0;
+}
+.hotel-cover {
+  width: 100%;
+  height: 100%;
+  min-height: 220rpx;
+  display: block;
+}
+.hotel-cover-ph {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(135deg, #1781AC, #5BC2E7);
+  color: rgba(255,255,255,0.7);
+  font-size: 64rpx;
+}
+.hotel-city-tag {
+  position: absolute;
+  left: 12rpx;
+  top: 12rpx;
+  padding: 4rpx 14rpx;
+  background: rgba(0,0,0,0.55);
+  color: #fff;
+  font-size: 22rpx;
+  border-radius: 8rpx;
+}
+.hotel-content {
+  flex: 1;
+  padding: 20rpx 22rpx;
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+.hotel-name-row { margin-bottom: 6rpx; }
+.hotel-name {
+  font-size: 30rpx;
+  font-weight: 700;
+  color: #1A1A1A;
+  line-height: 1.3;
+}
+.hotel-star-row {
+  display: flex;
+  align-items: center;
+  margin-bottom: 6rpx;
+}
+.star-icon { color: #FF9F2C; font-size: 22rpx; margin-right: 4rpx; }
+.star-text { color: #FF9F2C; font-size: 22rpx; font-weight: 600; }
+.hotel-room {
+  font-size: 24rpx;
+  color: #595959;
+  margin-bottom: 4rpx;
+}
+.hotel-date-row {
+  font-size: 22rpx;
+  color: #8C8C8C;
+  margin-bottom: 8rpx;
+}
+.date-sep { margin: 0 8rpx; }
+.hotel-facilities {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8rpx;
+  margin-bottom: auto;
+}
+.facility-tag {
+  font-size: 20rpx;
+  color: #1BA0D7;
+  background: #E6F4FB;
+  padding: 4rpx 12rpx;
+  border-radius: 6rpx;
+}
+.hotel-bottom-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 10rpx;
+  padding-top: 10rpx;
+  border-top: 1rpx dashed #E9EBF0;
+}
+.hotel-price {
+  font-size: 32rpx;
+  font-weight: 700;
+  color: #FF4D4F;
+}
+.hotel-detail-link {
+  font-size: 24rpx;
+  color: #1BA0D7;
+}
+
+/* ===== 每日行程 ===== */
+.day-block {
+  margin-bottom: 28rpx;
+  padding-bottom: 8rpx;
+}
+.day-block:last-child { margin-bottom: 0; }
+.day-header {
+  display: flex;
+  align-items: center;
+  margin-bottom: 20rpx;
+}
+.day-badge {
+  width: 80rpx;
+  height: 80rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(135deg, #0F7BA6, #1BA0D7);
+  border-radius: 20rpx;
+  margin-right: 18rpx;
+  box-shadow: 0 4rpx 16rpx rgba(27,160,215,0.3);
+}
+.day-num {
+  color: #fff;
+  font-size: 26rpx;
+  font-weight: 700;
+  letter-spacing: 1rpx;
+}
+.day-info { flex: 1; }
+.day-title {
+  font-size: 32rpx;
+  font-weight: 700;
+  color: #1A1A1A;
+}
+.day-city {
+  font-size: 26rpx;
+  color: #8C8C8C;
+  margin-top: 4rpx;
+}
+
+.day-timeline {
+  position: relative;
+  padding-left: 40rpx;
+}
+.day-timeline::before {
+  content: '';
+  position: absolute;
+  left: 11rpx;
+  top: 12rpx;
+  bottom: 20rpx;
+  width: 2rpx;
+  background: #E6F4FB;
+}
+.timeline-item {
+  position: relative;
+  padding-bottom: 24rpx;
+}
+.timeline-dot {
+  position: absolute;
+  left: -34rpx;
+  top: 10rpx;
+  width: 20rpx;
+  height: 20rpx;
+  border-radius: 50%;
+  background: #1BA0D7;
+  box-shadow: 0 0 0 6rpx #fff, 0 0 0 8rpx #E6F4FB;
+  z-index: 2;
+}
+.timeline-dot-scenic { background: #07C160; box-shadow: 0 0 0 6rpx #fff, 0 0 0 8rpx #E7F6EC; }
+.timeline-dot-transport { background: #1BA0D7; }
+.timeline-dot-meal { background: #FF9F2C; box-shadow: 0 0 0 6rpx #fff, 0 0 0 8rpx #FFF1DF; }
+.timeline-dot-hotel { background: #7C5CD6; box-shadow: 0 0 0 6rpx #fff, 0 0 0 8rpx #F0EBFF; }
+.timeline-dot-custom { background: #8C8C8C; box-shadow: 0 0 0 6rpx #fff, 0 0 0 8rpx #F2F2F2; }
+
+.timeline-content { padding-left: 4rpx; }
+.item-top-row {
+  display: flex;
+  align-items: center;
+  gap: 14rpx;
+  margin-bottom: 6rpx;
+}
+.item-type-tag {
+  font-size: 20rpx;
+  font-weight: 600;
+  padding: 4rpx 12rpx;
+  border-radius: 6rpx;
+}
+.type-tag-scenic { background: #E7F6EC; color: #07C160; }
+.type-tag-transport { background: #E6F4FB; color: #1BA0D7; }
+.type-tag-meal { background: #FFF1DF; color: #FF9F2C; }
+.type-tag-hotel { background: #F0EBFF; color: #7C5CD6; }
+.type-tag-custom { background: #F2F2F2; color: #8C8C8C; }
+.item-time {
+  font-size: 24rpx;
+  color: #8C8C8C;
+  font-variant-numeric: tabular-nums;
+}
+.item-name {
+  font-size: 30rpx;
+  font-weight: 600;
+  color: #1A1A1A;
+  margin-bottom: 6rpx;
+}
+.item-note {
+  font-size: 26rpx;
+  color: #595959;
+  line-height: 1.6;
+}
+
+/* 景点媒体 */
+.scenic-media {
+  position: relative;
+  margin-top: 16rpx;
+  border-radius: 16rpx;
+  overflow: hidden;
+}
+.scenic-cover {
+  width: 100%;
+  height: 360rpx;
+  display: block;
+}
+.scenic-badge {
+  position: absolute;
+  right: 16rpx;
+  bottom: 16rpx;
+  padding: 6rpx 16rpx;
+  background: rgba(0,0,0,0.6);
+  color: #fff;
+  font-size: 22rpx;
+  border-radius: 20rpx;
+  backdrop-filter: blur(10rpx);
+}
+.scenic-intro {
+  font-size: 27rpx;
+  color: #595959;
+  line-height: 1.7;
+  margin-top: 14rpx;
+}
+.scenic-highlights {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12rpx;
+  margin-top: 14rpx;
+}
+.hl-chip {
+  font-size: 22rpx;
+  color: #07C160;
+  background: #E7F6EC;
+  padding: 6rpx 16rpx;
+  border-radius: 20rpx;
+}
+.video-wrap {
+  margin-top: 16rpx;
+  border-radius: 16rpx;
+  overflow: hidden;
+}
+.scenic-video {
+  width: 100%;
+  height: 400rpx;
+  display: block;
+  background: #000;
+}
+.scenic-gallery {
+  white-space: nowrap;
+  margin-top: 14rpx;
+}
+.gallery-img {
+  width: 220rpx;
+  height: 220rpx;
+  border-radius: 12rpx;
+  margin-right: 14rpx;
+  display: inline-block;
+}
+.scenic-guide {
+  display: flex;
+  align-items: flex-start;
+  margin-top: 16rpx;
+  padding: 18rpx 20rpx;
+  background: #F6FAFE;
+  border-radius: 12rpx;
+}
+.guide-icon { margin-right: 12rpx; flex-shrink: 0; font-size: 26rpx; }
+.guide-text {
+  font-size: 25rpx;
+  color: #595959;
+  line-height: 1.6;
+}
+
+/* 当日补充 */
+.day-extra-box {
+  margin-top: 8rpx;
+  padding: 18rpx 20rpx;
+  background: #FAFBFC;
+  border-radius: 12rpx;
+  border: 1rpx solid #F0F2F5;
+}
+.extra-item {
+  display: flex;
+  align-items: center;
+  padding: 8rpx 0;
+  font-size: 25rpx;
+  color: #595959;
+}
+.extra-icon { width: 40rpx; flex-shrink: 0; }
+.extra-label {
+  width: 72rpx;
+  color: #8C8C8C;
+  flex-shrink: 0;
+}
+.extra-value { flex: 1; }
+
+/* ===== 景点图集总览 ===== */
+.gallery-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12rpx;
+}
+.gallery-item {
+  width: calc((100% - 24rpx) / 3);
+  height: 200rpx;
+  border-radius: 12rpx;
+}
+
+/* ===== 服务说明 ===== */
+.service-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20rpx 0;
+}
+.service-item {
+  width: 50%;
+  display: flex;
+  align-items: center;
+  padding-right: 10rpx;
+  box-sizing: border-box;
+}
+.service-icon {
+  width: 72rpx;
+  height: 72rpx;
+  line-height: 72rpx;
+  text-align: center;
+  border-radius: 18rpx;
+  font-size: 28rpx;
+  font-weight: 700;
+  flex-shrink: 0;
+  margin-right: 18rpx;
+}
+.service-icon-car,
+.service-icon-bus { background: #E6F4FB; color: #1BA0D7; }
+.service-icon-ticket { background: #E7F6EC; color: #07C160; }
+.service-icon-hotel { background: #F0EBFF; color: #7C5CD6; }
+.service-icon-meal { background: #FFF1DF; color: #FF9F2C; }
+.service-icon-guide { background: #FFE9E9; color: #E8556D; }
+.service-icon-insurance { background: #E8F3FF; color: #2E6BE6; }
+.service-text { flex: 1; min-width: 0; }
+.service-title {
+  font-size: 28rpx;
+  font-weight: 600;
+  color: #1A1A1A;
+}
+.service-desc {
+  font-size: 22rpx;
+  color: #8C8C8C;
+  margin-top: 4rpx;
+}
+
+/* ===== 底部品牌区 ===== */
+.footer-section {
+  margin: 32rpx 24rpx 48rpx;
+  padding: 36rpx 28rpx;
+  background: linear-gradient(135deg, #0F7BA6 0%, #1BA0D7 100%);
+  border-radius: 24rpx;
+  color: #fff;
+  box-shadow: 0 8rpx 32rpx rgba(27,160,215,0.3);
+}
+.footer-brand {
+  display: flex;
+  align-items: center;
+  margin-bottom: 28rpx;
+}
+.brand-logo {
+  width: 72rpx;
+  height: 72rpx;
+  line-height: 72rpx;
+  text-align: center;
+  background: rgba(255,255,255,0.2);
+  border-radius: 18rpx;
+  font-size: 36rpx;
+  font-weight: 700;
+  margin-right: 18rpx;
+}
+.brand-name {
+  font-size: 32rpx;
+  font-weight: 700;
+  letter-spacing: 2rpx;
+}
+.brand-slogan {
+  font-size: 22rpx;
+  opacity: 0.85;
+  margin-top: 4rpx;
+}
+.footer-qr-wrap {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 24rpx;
+  background: rgba(255,255,255,0.15);
+  border-radius: 20rpx;
+  backdrop-filter: blur(10rpx);
+}
+.footer-qr {
+  width: 200rpx;
+  height: 200rpx;
+  background: #fff;
+  border-radius: 12rpx;
+  padding: 8rpx;
+  box-sizing: border-box;
+}
+.footer-qr-ph {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  color: #8C8C8C;
+}
+.qr-ph-icon { font-size: 48rpx; margin-bottom: 8rpx; }
+.qr-ph-text { font-size: 22rpx; color: #595959; }
+.qr-tip {
+  margin-top: 16rpx;
+  font-size: 24rpx;
+  opacity: 0.9;
+}
+
+.safe-bottom {
+  padding-bottom: calc(env(safe-area-inset-bottom) + 20rpx);
+}
+
+/* ===== 二维码弹窗 ===== */
+.qr-mask {
+  position: fixed; inset: 0;
+  background: rgba(0,0,0,0.6);
+  z-index: 200;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.qr-modal {
+  width: 560rpx;
+  background: #fff;
+  border-radius: 24rpx;
+  padding: 48rpx 40rpx 36rpx;
+  text-align: center;
+  position: relative;
+}
+.qr-modal-title {
+  font-size: 34rpx;
+  font-weight: 700;
+  color: #1A1A1A;
+}
+.qr-modal-sub {
+  font-size: 26rpx;
+  color: #8C8C8C;
+  margin-top: 8rpx;
+  margin-bottom: 28rpx;
+}
+.qr-big-img {
+  width: 400rpx;
+  height: 400rpx;
+  margin: 0 auto;
+}
+.qr-actions {
+  margin-top: 28rpx;
+}
+.qr-action-btn {
+  padding: 20rpx 0;
+  background: linear-gradient(135deg, #0F7BA6, #1BA0D7);
+  color: #fff;
+  border-radius: 16rpx;
+  font-size: 28rpx;
+  font-weight: 600;
+}
+.qr-action-btn:active { opacity: 0.85; }
+.qr-close {
+  position: absolute;
+  top: 24rpx;
+  right: 28rpx;
+  width: 48rpx;
+  height: 48rpx;
+  line-height: 48rpx;
+  text-align: center;
+  color: #BFBFBF;
+  font-size: 28rpx;
+}
+
+/* ===== 海报弹窗 ===== */
+.poster-mask {
+  position: fixed; inset: 0;
+  background: rgba(0,0,0,0.7);
+  z-index: 300;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.poster-modal {
+  width: 620rpx;
+  max-height: 85vh;
+  background: #fff;
+  border-radius: 24rpx;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+.poster-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 28rpx 32rpx;
+  border-bottom: 1rpx solid #F0F2F5;
+}
+.poster-title {
+  font-size: 32rpx;
+  font-weight: 700;
+  color: #1A1A1A;
+}
+.poster-close {
+  width: 48rpx;
+  height: 48rpx;
+  line-height: 48rpx;
+  text-align: center;
+  color: #BFBFBF;
+  font-size: 28rpx;
+}
+.poster-scroll {
+  flex: 1;
+  padding: 24rpx;
+}
+.poster-img-wrap {
+  text-align: center;
+}
+.poster-img {
+  width: 100%;
+  border-radius: 16rpx;
+  box-shadow: 0 8rpx 32rpx rgba(0,0,0,0.15);
+}
+.poster-loading {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 80rpx 0;
+  color: #8C8C8C;
+}
+.poster-loading .loading-spinner {
+  margin-bottom: 20rpx;
+}
+.poster-fail {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 80rpx 0;
+  color: #8C8C8C;
+}
+.fail-icon {
+  width: 80rpx; height: 80rpx; line-height: 80rpx;
+  border-radius: 50%;
+  background: #FFF1F0;
+  color: #FF4D4F;
+  font-size: 40rpx;
+  margin-bottom: 16rpx;
+}
+.fail-text { font-size: 28rpx; }
+.poster-actions {
+  display: flex;
+  gap: 20rpx;
+  padding: 20rpx 24rpx 28rpx;
+  border-top: 1rpx solid #F0F2F5;
+}
+.poster-btn {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8rpx;
+  padding: 20rpx 0;
+  background: #F6FAFE;
+  color: #1BA0D7;
+  border-radius: 16rpx;
+  font-size: 26rpx;
+  font-weight: 600;
+  border: none;
+  line-height: normal;
+  margin: 0;
+}
+.poster-btn::after { border: none; }
+.poster-btn-primary {
+  background: linear-gradient(135deg, #0F7BA6, #1BA0D7);
+  color: #fff;
+}
+.poster-btn:active { opacity: 0.85; }
+
+/* 离屏Canvas */
+.poster-canvas {
+  position: fixed;
+  left: -9999px;
+  top: -9999px;
+  width: 750rpx;
+  height: 1600rpx;
+}

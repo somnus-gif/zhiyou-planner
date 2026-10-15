@@ -25,10 +25,6 @@ Page({
       }))
     ];
     this.setData({ stageTabs });
-
-    if (options.action === 'new') {
-      wx.navigateTo({ url: '/pages/customer/edit/edit' });
-    }
   },
 
   onShow() {

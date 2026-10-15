@@ -1,0 +1,376 @@
+<!-- pages/trip/showcase/showcase.wxml - 行程展示页（海报风格 · 面向客户） -->
+<view class="page">
+
+  <view class="state-box" wx:if="{{pageState==='loading'}}">
+    <view class="loading-spinner"></view>
+    <view class="loading-text">行程加载中...</view>
+  </view>
+  <view class="state-box" wx:elif="{{pageState==='error'}}">
+    <view class="err-illu">!</view>
+    <view class="err-text">行程加载失败</view>
+    <view class="err-msg" wx:if="{{errorMsg}}">{{errorMsg}}</view>
+    <view class="err-tip">请检查云函数是否已部署，或点击重试</view>
+    <view class="err-retry" bindtap="onRetry">重新加载</view>
+  </view>
+
+  <block wx:else>
+
+    <!-- ============ 顶部大图 Hero（海报式） ============ -->
+    <view class="hero">
+      <image wx:if="{{heroImage}}" class="hero-img" src="{{heroImage}}" mode="aspectFill" />
+      <view wx:else class="hero-img hero-img-ph"></view>
+      <view class="hero-overlay"></view>
+      <view class="hero-decor hero-decor-1"></view>
+      <view class="hero-decor hero-decor-2"></view>
+      
+      <view class="hero-inner">
+        <view class="hero-badge">
+          <text class="badge-line"></text>
+          <text class="badge-text">EXCLUSIVE TRIP</text>
+          <text class="badge-line"></text>
+        </view>
+        <view class="hero-title">{{trip.title || '私人定制之旅'}}</view>
+        <view class="hero-subtitle" wx:if="{{customerName}}">Dear {{customerName}} · 专属定制</view>
+        <view class="hero-meta-row">
+          <view class="meta-chip">
+            <text class="meta-icon">📅</text>
+            <text class="meta-text">{{dayCount}}天{{dayCount>0? (dayCount-1) + '晚' : ''}}</text>
+          </view>
+          <view class="meta-chip" wx:if="{{cityList.length}}">
+            <text class="meta-icon">📍</text>
+            <text class="meta-text">{{cityList.length}}城</text>
+          </view>
+          <view class="meta-chip" wx:if="{{paxText}}">
+            <text class="meta-icon">👥</text>
+            <text class="meta-text">{{paxText}}</text>
+          </view>
+        </view>
+      </view>
+
+      <view class="hero-wave">
+        <view class="wave-shape"></view>
+      </view>
+    </view>
+
+    <!-- ============ 快速操作栏 ============ -->
+    <view class="action-bar">
+      <view class="action-btn" wx:if="{{!readOnly}}" bindtap="onEditTrip">
+        <text class="action-icon">✏️</text>
+        <text class="action-text">编辑行程</text>
+      </view>
+      <view class="action-btn action-btn-primary" bindtap="onOpenPoster">
+        <text class="action-icon">🖼</text>
+        <text class="action-text">生成海报</text>
+      </view>
+      <view class="action-btn" bindtap="onShowQrCode">
+        <text class="action-icon">📱</text>
+        <text class="action-text">行程码</text>
+      </view>
+      <button class="action-btn" open-type="share">
+        <text class="action-icon">📤</text>
+        <text class="action-text">分享</text>
+      </button>
+    </view>
+
+    <!-- ============ 行程亮点 ============ -->
+    <view class="section-card intro-card" wx:if="{{trip.intro}}">
+      <view class="card-tag">亮点速览</view>
+      <view class="intro-title">为什么选择这条行程</view>
+      <view class="intro-text">{{trip.intro}}</view>
+    </view>
+
+    <!-- ============ 目的地路线 ============ -->
+    <view class="section-card route-card" wx:if="{{cityList.length}}">
+      <view class="card-tag">目的地</view>
+      <view class="card-title">行程路线</view>
+      <view class="route-flow">
+        <block wx:for="{{cityList}}" wx:key="*this">
+          <view class="route-node">
+            <view class="route-dot {{index===0?'start':index===cityList.length-1?'end':''}}"></view>
+            <view class="route-city">{{item}}</view>
+          </view>
+          <view class="route-arrow" wx:if="{{index < cityList.length - 1}}">→</view>
+        </block>
+      </view>
+    </view>
+
+    <!-- ============ 接机服务 ============ -->
+    <view class="section-card pickup-card" wx:if="{{pickup}}">
+      <view class="card-tag card-tag-orange">贴心服务</view>
+      <view class="card-title">接机服务</view>
+      <view class="pickup-hero">
+        <view class="pickup-icon-box">✈️</view>
+        <view class="pickup-hero-text">
+          <view class="pickup-slogan">专人举牌 · 落地即接</view>
+          <view class="pickup-sub">全程专属用车 · 专业司机服务</view>
+        </view>
+      </view>
+      <view class="pickup-info-grid">
+        <view class="info-item" wx:if="{{pickup.flightNo}}">
+          <view class="info-label">航班号</view>
+          <view class="info-value info-value-highlight">{{pickup.flightNo}}</view>
+        </view>
+        <view class="info-item" wx:if="{{pickup.arriveTime}}">
+          <view class="info-label">抵达时间</view>
+          <view class="info-value">{{pickup.arriveTime}}</view>
+        </view>
+        <view class="info-item" wx:if="{{pickup.airport}}">
+          <view class="info-label">抵达机场</view>
+          <view class="info-value">{{pickup.airport}}</view>
+        </view>
+        <view class="info-item" wx:if="{{pickup.meetPoint}}">
+          <view class="info-label">集合点</view>
+          <view class="info-value">{{pickup.meetPoint}}</view>
+        </view>
+        <view class="info-item" wx:if="{{pickup.vehicle}}">
+          <view class="info-label">接送车型</view>
+          <view class="info-value">{{pickup.vehicle}}</view>
+        </view>
+      </view>
+
+      <view class="driver-card" wx:if="{{pickup.driverName || pickup.driverPhone}}">
+        <view class="driver-avatar">{{pickup.driverName ? pickup.driverName[0] : '司'}}</view>
+        <view class="driver-info">
+          <view class="driver-name">{{pickup.driverName || '专属司机'}}</view>
+          <view class="driver-tags">
+            <text class="driver-tag">5年以上驾龄</text>
+            <text class="driver-tag">熟悉路况</text>
+          </view>
+        </view>
+        <view class="driver-call-btn" wx:if="{{pickup.driverPhone}}" catchtap="onCallDriver">
+          <text>📞</text>
+        </view>
+      </view>
+
+      <view class="pickup-note-box" wx:if="{{pickup.note}}">
+        <text class="note-icon">💡</text>
+        <text class="note-content">{{pickup.note}}</text>
+      </view>
+    </view>
+
+    <!-- ============ 酒店安排 ============ -->
+    <view class="section-card" wx:if="{{hotelList.length}}">
+      <view class="card-tag card-tag-purple">臻选住宿</view>
+      <view class="card-title">酒店安排</view>
+      <view class="card-sub">精选优质酒店 · 舒适旅途保障</view>
+
+      <view class="hotel-card {{item.hasDetail && !readOnly ? 'hotel-tap' : ''}}"
+            wx:for="{{hotelList}}" wx:key="_id"
+            data-id="{{item._id}}" bindtap="onHotelTap">
+        <view class="hotel-cover-wrap">
+          <image wx:if="{{item.image}}" class="hotel-cover" src="{{item.image}}" mode="aspectFill" />
+          <view wx:else class="hotel-cover hotel-cover-ph">酒</view>
+          <view class="hotel-city-tag" wx:if="{{item.city}}">{{item.city}}</view>
+        </view>
+        <view class="hotel-content">
+          <view class="hotel-name-row">
+            <text class="hotel-name">{{item.name}}</text>
+          </view>
+          <view class="hotel-star-row" wx:if="{{item.star}}">
+            <text class="star-icon">★</text>
+            <text class="star-text">{{item.starText}}</text>
+          </view>
+          <view class="hotel-room" wx:if="{{item.roomType}}">{{item.roomType}}</view>
+          <view class="hotel-date-row" wx:if="{{item.checkIn}}">
+            <text>{{item.checkIn}} 入住</text>
+            <text class="date-sep">·</text>
+            <text>{{item.checkOut}} 离店</text>
+          </view>
+          <view class="hotel-facilities" wx:if="{{item.facilities.length}}">
+            <text class="facility-tag" wx:for="{{item.facilities}}" wx:key="*this" wx:for-item="f">{{f}}</text>
+          </view>
+          <view class="hotel-bottom-row">
+            <text class="hotel-price" wx:if="{{item.priceText}}">{{item.priceText}}</text>
+            <text class="hotel-detail-link" wx:if="{{item.hasDetail && !readOnly}}">查看详情 ›</text>
+          </view>
+        </view>
+      </view>
+    </view>
+
+    <!-- ============ 行程规划 ============ -->
+    <view class="section-card">
+      <view class="card-tag card-tag-green">每日行程</view>
+      <view class="card-title">行程规划</view>
+      <view class="card-sub">{{dayCount}}天精彩，天天有亮点</view>
+
+      <view class="day-block" wx:for="{{days}}" wx:key="dayIndex" wx:for-item="day">
+        <view class="day-header">
+          <view class="day-badge">
+            <text class="day-num">{{day.dayLabel}}</text>
+          </view>
+          <view class="day-info">
+            <view class="day-title">{{day.dateLabel}}</view>
+            <view class="day-city" wx:if="{{day.city}}">📍 {{day.city}}</view>
+          </view>
+        </view>
+
+        <view class="day-timeline">
+          <view class="timeline-item" wx:for="{{day.items}}" wx:key="index" wx:for-item="it">
+            <view class="timeline-dot timeline-dot-{{it.type}}"></view>
+            <view class="timeline-content">
+              <view class="item-top-row">
+                <text class="item-type-tag type-tag-{{it.type}}">{{it.typeLabel}}</text>
+                <text class="item-time" wx:if="{{it.startTime}}">
+                  {{it.startTime}}{{it.endTime ? ' - ' + it.endTime : ''}}
+                </text>
+              </view>
+              <view class="item-name">{{it.name}}</view>
+              <view class="item-note" wx:if="{{it.note}}">{{it.note}}</view>
+
+              <!-- 景点：图片 + 介绍 + 亮点 + 视频 -->
+              <block wx:if="{{it.type==='scenic'}}">
+                <view class="scenic-media">
+                  <image wx:if="{{it.coverImage}}" class="scenic-cover"
+                         src="{{it.coverImage}}" mode="aspectFill"
+                         data-url="{{it.coverImage}}" data-urls="{{it.images.length ? it.images : [it.coverImage]}}"
+                         bindtap="onPreviewImage" />
+                  <view class="scenic-badge" wx:if="{{it.duration}}">
+                    约{{it.duration}}小时
+                  </view>
+                </view>
+                <view class="scenic-intro" wx:if="{{it.intro}}">{{it.intro}}</view>
+                <view class="scenic-highlights" wx:if="{{it.highlights.length}}">
+                  <text class="hl-chip" wx:for="{{it.highlights}}" wx:key="*this" wx:for-item="h">{{h}}</text>
+                </view>
+                <!-- 景点视频 -->
+                <view class="video-wrap" wx:if="{{it.videoUrl}}">
+                  <video class="scenic-video" src="{{it.videoUrl}}"
+                         controls object-fit="contain" show-center-play-btn></video>
+                </view>
+                <!-- 景点图集 -->
+                <scroll-view wx:if="{{it.images.length > 1}}" class="scenic-gallery" scroll-x enhanced show-scrollbar="{{false}}">
+                  <image wx:for="{{it.images}}" wx:key="*this" wx:for-item="img"
+                         class="gallery-img" src="{{img}}" mode="aspectFill"
+                         data-url="{{img}}" data-urls="{{it.images}}" bindtap="onPreviewImage" />
+                </scroll-view>
+                <view class="scenic-guide" wx:if="{{it.playGuide}}">
+                  <text class="guide-icon">💡</text>
+                  <text class="guide-text">{{it.playGuide}}</text>
+                </view>
+              </block>
+            </view>
+          </view>
+
+          <!-- 当日补充信息 -->
+          <view class="day-extra-box" wx:if="{{day.transport || day.meal || day.hotel}}">
+            <view class="extra-item" wx:if="{{day.transport}}">
+              <text class="extra-icon">🚗</text>
+              <text class="extra-label">交通</text>
+              <text class="extra-value">{{day.transport}}</text>
+            </view>
+            <view class="extra-item" wx:if="{{day.meal}}">
+              <text class="extra-icon">🍽</text>
+              <text class="extra-label">餐食</text>
+              <text class="extra-value">{{day.meal}}</text>
+            </view>
+            <view class="extra-item" wx:if="{{day.hotel}}">
+              <text class="extra-icon">🏨</text>
+              <text class="extra-label">住宿</text>
+              <text class="extra-value">{{day.hotel}}</text>
+            </view>
+          </view>
+        </view>
+      </view>
+    </view>
+
+    <!-- ============ 景点图集总览 ============ -->
+    <view class="section-card" wx:if="{{gallery.length}}">
+      <view class="card-tag">美景掠影</view>
+      <view class="card-title">景点图集</view>
+      <view class="gallery-grid">
+        <image wx:for="{{gallery}}" wx:key="url"
+               class="gallery-item" src="{{item.url}}" mode="aspectFill"
+               data-url="{{item.url}}" data-urls="{{gallery}}"
+               bindtap="onPreviewGallery" />
+      </view>
+    </view>
+
+    <!-- ============ 服务说明 ============ -->
+    <view class="section-card" wx:if="{{serviceList.length}}">
+      <view class="card-tag card-tag-blue">品质保障</view>
+      <view class="card-title">服务包含</view>
+      <view class="service-grid">
+        <view class="service-item" wx:for="{{serviceList}}" wx:key="title">
+          <view class="service-icon service-icon-{{item.icon}}">{{item.label}}</view>
+          <view class="service-text">
+            <view class="service-title">{{item.title}}</view>
+            <view class="service-desc">{{item.desc}}</view>
+          </view>
+        </view>
+      </view>
+    </view>
+
+    <!-- ============ 底部品牌区 ============ -->
+    <view class="footer-section">
+      <view class="footer-brand">
+        <view class="brand-logo">智</view>
+        <view class="brand-text">
+          <view class="brand-name">智游策划师</view>
+          <view class="brand-slogan">您的专属旅行定制顾问</view>
+        </view>
+      </view>
+      <view class="footer-qr-wrap" bindtap="onShowQrCode">
+        <image wx:if="{{qrCodeUrl}}" class="footer-qr" src="{{qrCodeUrl}}" mode="aspectFit" />
+        <view wx:else class="footer-qr footer-qr-ph">
+          <text class="qr-ph-icon">📱</text>
+          <text class="qr-ph-text">点我生成</text>
+        </view>
+        <text class="qr-tip">扫码查看完整行程</text>
+      </view>
+    </view>
+
+    <view class="safe-bottom"></view>
+
+    <!-- ============ 二维码弹窗 ============ -->
+    <view class="qr-mask" wx:if="{{showQrModal}}" bindtap="onCloseQrModal">
+      <view class="qr-modal" catchtap="noop">
+        <view class="qr-modal-title">行程小程序码</view>
+        <view class="qr-modal-sub">长按识别，随时查看行程</view>
+        <image wx:if="{{qrCodeUrl}}" class="qr-big-img" src="{{qrCodeUrl}}" mode="aspectFit" />
+        <view class="qr-actions">
+          <view class="qr-action-btn" bindtap="onSaveQrCode">保存到相册</view>
+        </view>
+        <view class="qr-close" bindtap="onCloseQrModal">✕</view>
+      </view>
+    </view>
+
+    <!-- ============ 海报弹窗 ============ -->
+    <view class="poster-mask" wx:if="{{showPosterModal}}" bindtap="onClosePoster">
+      <view class="poster-modal" catchtap="noop">
+        <view class="poster-header">
+          <text class="poster-title">行程海报</text>
+          <view class="poster-close" bindtap="onClosePoster">✕</view>
+        </view>
+        
+        <scroll-view scroll-y class="poster-scroll" enhanced show-scrollbar="{{false}}">
+          <view class="poster-img-wrap" wx:if="{{posterImage}}">
+            <image class="poster-img" src="{{posterImage}}" mode="widthFix" />
+          </view>
+          <view class="poster-loading" wx:elif="{{posterGenerating}}">
+            <view class="loading-spinner"></view>
+            <text class="loading-text">海报生成中...</text>
+          </view>
+          <view class="poster-fail" wx:else>
+            <text class="fail-icon">!</text>
+            <text class="fail-text">海报生成失败</text>
+          </view>
+        </scroll-view>
+
+        <view class="poster-actions">
+          <view class="poster-btn poster-btn-primary" bindtap="onSavePoster">
+            <text>💾</text>
+            <text>保存到相册</text>
+          </view>
+          <button class="poster-btn" open-type="share">
+            <text>📤</text>
+            <text>分享给好友</text>
+          </button>
+        </view>
+      </view>
+    </view>
+
+    <!-- 海报绘制用 Canvas（离屏） -->
+    <canvas type="2d" id="posterCanvas" class="poster-canvas"></canvas>
+
+  </block>
+</view>

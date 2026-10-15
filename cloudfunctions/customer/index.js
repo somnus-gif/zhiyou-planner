@@ -13,7 +13,7 @@
 //
 // 权限模型：
 //   - dashboard: 全员统计，云函数内 bypass 读全部 customer 集合
-//   - list/get: 默认仅自己创建的客户；带 queryAll=true 且 role=admin 可读全部
+//   - list/get: 普通定制师仅自己创建的客户；admin 可读全部（与工作台一致）
 //   - create/update/addNote/advanceStage/lost: 仅责任定制师（_openid 匹配）可操作
 
 const cloud = require('wx-server-sdk');
@@ -94,7 +94,9 @@ async function list(event, openid) {
 
   const where = { stage: _.neq('lost') };
   if (stage && stage !== 'all') where.stage = stage;
-  if (!queryAll) where._openid = openid;
+  // admin 默认可读全部客户（与工作台一致）；普通定制师仅读自己创建的
+  const isAdmin = await isAdminUser(openid);
+  if (!queryAll && !isAdmin) where._openid = openid;
   if (keyword) {
     where.name = db.RegExp({ regexp: String(keyword), options: 'i' });
   }
@@ -130,7 +132,7 @@ async function get(event, openid) {
   const { data } = await db.collection('customer').doc(id).get().catch(() => ({ data: null }));
   if (!data) return fail(404, '客户不存在');
 
-  if (data._openid !== openid) {
+  if (data._openid !== openid && !(await isAdminUser(openid))) {
     return fail(403, '无权查看该客户档案');
   }
 
@@ -138,7 +140,7 @@ async function get(event, openid) {
   try {
     const tripRes = await db.collection('tripPlan')
       .where({ customerId: id })
-      .field({ title: true, status: true, updatedAt: true })
+      .field({ _id: true, title: true, status: true, updatedAt: true })
       .orderBy('updatedAt', 'desc')
       .limit(10)
       .get();
@@ -252,6 +254,14 @@ async function lost(event, openid) {
     data: { stage: 'lost', lostReason: reason.trim(), updatedAt: Date.now() }
   });
   return ok({ id }, '客户已归档为流失');
+}
+
+// admin 判定：staff 集合中 role 为 admin 且状态 active
+async function isAdminUser(openid) {
+  const { data } = await db.collection('staff')
+    .where({ _openid: openid, status: 'active' }).limit(1).get()
+    .catch(() => ({ data: [] }));
+  return !!(data[0] && data[0].role === 'admin');
 }
 
 async function assertOwned(id, openid) {

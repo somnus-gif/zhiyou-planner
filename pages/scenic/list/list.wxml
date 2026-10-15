@@ -1,5 +1,6 @@
 <!-- pages/scenic/list/list.wxml -->
 <view class="page">
+  <view class="add-bar"><view class="add-btn" bindtap="onCreateTap">+ 新增景点</view></view>
 
   <view class="search-bar">
     <view class="search-input">
@@ -35,7 +36,7 @@
       <view class="empty-illu">○</view>
       <view class="empty-text">{{keyword || tagFilter || cityFilter!=='全部' ? '没有找到匹配的景点' : '景点库暂无数据'}}</view>
       <view class="empty-action" wx:if="{{!keyword && !tagFilter && cityFilter==='全部'}}"
-            bindtap="onInitDemo">加载演示数据（8 条云南经典景点）</view>
+            bindtap="onInitDemo">加载演示数据（内置海外经典景点）</view>
     </view>
 
     <view class="state-box" wx:elif="{{pageState==='error'}}">
@@ -69,5 +70,6 @@
     </view>
   </view>
 
+  <view class="fab" bindtap="onCreateTap">+</view>
   <view class="safe-bottom"></view>
 </view>

@@ -1,4 +1,4 @@
-<!-- pages/scenic/detail/detail.wxml -->
+<!-- pages/scenic/detail/detail.wxml - 景点详情（图片管理版） -->
 <view class="page">
 
   <view class="state-box" wx:if="{{pageState==='loading'}}">
@@ -12,6 +12,7 @@
   </view>
 
   <block wx:else>
+    <!-- 顶部轮播图 -->
     <view class="gallery">
       <swiper class="swiper" indicator-dots="{{gallery.length > 1}}" autoplay="{{gallery.length > 1}}"
               circular="{{gallery.length > 1}}" interval="4000" duration="500"
@@ -24,16 +25,71 @@
           <image src="{{item}}" mode="aspectFill" class="swiper-img" />
         </swiper-item>
       </swiper>
-      <view class="upload-cover-btn" bindtap="onUploadCover">上传图片</view>
+      <view class="img-count" wx:if="{{gallery.length}}">
+        {{gallery.length}} 张
+      </view>
+    </view>
+
+    <!-- 图片管理区 -->
+    <view class="image-manage-section">
+      <view class="section-title-row">
+        <view class="section-title">景点图集</view>
+        <view class="manage-actions">
+          <text class="manage-btn" bindtap="toggleEditMode">
+            {{editMode ? '完成' : '管理'}}
+          </text>
+          <text class="manage-btn primary" bindtap="onUploadImages">
+            + 上传图片
+          </text>
+        </view>
+      </view>
+
+      <view class="img-grid">
+        <view class="img-item" wx:for="{{imageList}}" wx:key="*this">
+          <image class="img-thumb" src="{{item}}" mode="aspectFill"
+                 data-idx="{{index}}" bindtap="onPreviewImage"
+                 data-url="{{item}}" data-urls="{{imageList}}" />
+          <view class="img-cover-tag" wx:if="{{index === 0 && scenic.coverImage}}">封面</view>
+          
+          <!-- 编辑模式操作 -->
+          <block wx:if="{{editMode}}">
+            <view class="img-edit-overlay">
+              <view class="img-edit-btn set-cover-btn"
+                    wx:if="{{index !== 0}}"
+                    data-url="{{item}}"
+                    catchtap="onSetCover">
+                设为封面
+              </view>
+              <view class="img-edit-btn delete-btn"
+                    data-url="{{item}}"
+                    catchtap="onDeleteImage">
+                删除
+              </view>
+            </view>
+          </block>
+        </view>
+
+        <!-- 上传占位 -->
+        <view class="img-item img-add-item" bindtap="onUploadImages" wx:if="{{imageList.length < 20}}">
+          <view class="add-icon">+</view>
+          <view class="add-text">上传图片</view>
+        </view>
+      </view>
     </view>
 
     <!-- 视频展示 -->
-    <view class="video-section" wx:if="{{scenic.videoUrl}}">
-      <view class="section-title">景点视频</view>
+    <view class="section" wx:if="{{scenic.videoUrl}}">
+      <view class="section-title-row">
+        <view class="section-title">景点视频</view>
+        <text class="manage-btn" wx:if="{{editMode}}" bindtap="onDeleteVideo">删除视频</text>
+      </view>
       <video src="{{scenic.videoUrl}}" controls class="scenic-video" object-fit="cover"></video>
     </view>
-    <view class="upload-video-btn" bindtap="onUploadVideo">{{scenic.videoUrl ? '更换视频' : '上传视频'}}</view>
+    <view class="upload-video-btn" wx:if="{{!scenic.videoUrl}}" bindtap="onUploadVideo">
+      + 上传景点视频
+    </view>
 
+    <!-- 基本信息 -->
     <view class="header">
       <view class="title">{{scenic.name}}</view>
       <view class="loc-row">
@@ -99,8 +155,21 @@
     <view style="height: 200rpx"></view>
 
     <view class="footer-bar safe-bottom">
+      <view class="action-btn ghost" bindtap="onEdit">编辑资料</view>
       <view class="action-btn ghost" bindtap="onCopyIntro">复制介绍</view>
       <button class="action-btn primary" open-type="share">分享给客户</button>
     </view>
   </block>
-</view>
+
+  <!-- 游玩方式编辑浮层 -->
+  <view class="sheet-mask" wx:if="{{guideSheet.show}}" catchtap="onGuideCancel">
+    <view class="guide-sheet" catchtap="noop">
+      <view class="sheet-title">编辑游玩方式</view>
+      <textarea class="sheet-textarea" value="{{guideSheet.text}}" bindinput="onGuideInput"
+                placeholder="如：建议上午前往，光线最佳……" maxlength="-1" auto-focus />
+      <view class="sheet-actions">
+        <view class="sheet-btn ghost" bindtap="onGuideCancel">取消</view>
+        <view class="sheet-btn primary" bindtap="onGuideSave">保存</view>
+      </view>
+    </view>
+  </view></view>

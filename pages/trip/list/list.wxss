@@ -1,0 +1,75 @@
+/* pages/trip/list/list.wxss */
+.page { min-height: 100vh; padding-bottom: 40rpx; }
+
+.add-bar { padding: 24rpx 32rpx 8rpx; }
+.add-btn { display: inline-block; padding: 14rpx 32rpx; background: #1BA0D7; color: #FFFFFF; font-size: 26rpx; border-radius: 32rpx; }
+.add-btn:active { opacity: 0.85; }
+
+.list-area { padding-top: 8rpx; }
+.state-box { display: flex; flex-direction: column; align-items: center; padding: 80rpx 0; }
+
+.skeleton-card { background: #fff; border-radius: 16rpx; margin: 16rpx 32rpx; padding: 32rpx 24rpx; }
+.sk-line { height: 28rpx; background: #F0F2F5; border-radius: 8rpx; }
+.sk-title { width: 60%; margin-bottom: 16rpx; }
+.sk-sub { width: 35%; }
+
+.empty-illu {
+  width: 96rpx; height: 96rpx; border-radius: 50%;
+  border: 4rpx dashed #BFBFBF; color: #BFBFBF;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 48rpx; margin-bottom: 24rpx;
+}
+.empty-text { font-size: 30rpx; color: #595959; }
+.empty-action { margin-top: 24rpx; padding: 16rpx 40rpx; background: #1BA0D7; color: #fff; border-radius: 32rpx; font-size: 26rpx; }
+.empty-action:active { opacity: 0.85; }
+
+.err-illu {
+  width: 96rpx; height: 96rpx; border-radius: 50%;
+  background: #FFF1F0; color: #FF4D4F;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 56rpx; font-weight: 700; margin-bottom: 24rpx;
+}
+.err-text { font-size: 30rpx; color: #595959; }
+.err-retry { margin-top: 16rpx; padding: 12rpx 40rpx; background: #1BA0D7; color: #fff; border-radius: 32rpx; font-size: 26rpx; }
+
+.trip-list { padding: 16rpx 32rpx 0; }
+.trip-card {
+  background: #fff; border-radius: 16rpx;
+  padding: 28rpx 24rpx 20rpx;
+  margin-bottom: 20rpx;
+  box-shadow: 0 2rpx 12rpx rgba(27,160,215,0.06);
+}
+.trip-card:active { opacity: 0.9; }
+.trip-head { display: flex; align-items: flex-start; justify-content: space-between; }
+.trip-title { font-size: 30rpx; color: #1A1A1A; font-weight: 500; flex: 1; margin-right: 16rpx; }
+.trip-status { font-size: 22rpx; padding: 4rpx 16rpx; border-radius: 20rpx; flex-shrink: 0; }
+.status-draft { background: #F0F2F5; color: #8C8C8C; }
+.status-confirmed { background: #E6F4FB; color: #1BA0D7; }
+.status-archived { background: #FFF7E6; color: #FA8C16; }
+.trip-meta { display: flex; flex-wrap: wrap; margin-top: 12rpx; }
+.meta-item { font-size: 22rpx; color: #8C8C8C; margin-right: 20rpx; }
+.trip-actions { display: flex; justify-content: flex-end; margin-top: 16rpx; padding-top: 16rpx; border-top: 1rpx solid #F0F2F5; }
+.trip-btn { padding: 10rpx 32rpx; margin-left: 16rpx; border-radius: 28rpx; font-size: 24rpx; background: #F5F7FA; color: #595959; }
+.trip-btn:active { opacity: 0.85; }
+.trip-btn.danger { background: #FFF1F0; color: #FF4D4F; }
+
+.load-more { width: 100%; text-align: center; color: #BFBFBF; font-size: 24rpx; padding: 24rpx 0; }
+
+.picker-mask { position: fixed; left: 0; top: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.45); z-index: 100; display: flex; align-items: flex-end; }
+.picker-sheet { width: 100%; max-height: 80vh; background: #fff; border-radius: 24rpx 24rpx 0 0; display: flex; flex-direction: column; padding-bottom: env(safe-area-inset-bottom); }
+.picker-head { display: flex; align-items: center; justify-content: space-between; padding: 28rpx 32rpx 12rpx; }
+.picker-title { font-size: 32rpx; font-weight: 600; color: #1A1A1A; }
+.picker-close { font-size: 32rpx; color: #BFBFBF; padding: 0 8rpx; }
+.picker-search { display: flex; align-items: center; padding: 12rpx 32rpx 20rpx; }
+.picker-field { flex: 1; background: #F5F7FA; border-radius: 32rpx; padding: 14rpx 28rpx; font-size: 28rpx; }
+.picker-search-btn { margin-left: 16rpx; padding: 14rpx 32rpx; background: #1BA0D7; color: #fff; border-radius: 32rpx; font-size: 26rpx; }
+.picker-search-btn:active { opacity: 0.85; }
+.picker-body { flex: 1; max-height: 56vh; }
+.picker-item { display: flex; align-items: center; padding: 24rpx 32rpx; border-bottom: 1rpx solid #F0F2F5; }
+.picker-item:active { background: #F7FAFC; }
+.picker-avatar { width: 72rpx; height: 72rpx; border-radius: 50%; background: #1BA0D7; color: #fff; display: flex; align-items: center; justify-content: center; font-size: 32rpx; font-weight: 600; }
+.picker-info { flex: 1; margin-left: 20rpx; }
+.picker-name { font-size: 28rpx; color: #1A1A1A; }
+.picker-phone { font-size: 22rpx; color: #8C8C8C; margin-top: 6rpx; }
+.picker-arrow { color: #C4CCD4; font-size: 32rpx; }
+.picker-empty { text-align: center; color: #BFBFBF; font-size: 26rpx; padding: 60rpx 0; }

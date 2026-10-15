@@ -1,0 +1,6 @@
+{
+  "navigationBarTitleText": "行程方案",
+  "enablePullDownRefresh": true,
+  "backgroundTextStyle": "dark",
+  "usingComponents": {}
+}

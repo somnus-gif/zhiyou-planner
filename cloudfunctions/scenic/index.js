@@ -35,10 +35,13 @@ exports.main = async (event, context) => {
 };
 
 async function list(event) {
-  const { keyword, city, tag, pageNo = 1, pageSize = 20 } = event;
+  const { keyword, city, tag, pageNo = 1, pageSize = 20, ids = [] } = event;
   const skip = (pageNo - 1) * pageSize;
 
   const where = { status: 'active' };
+  if (ids && ids.length) {
+    where._id = _.in(ids);
+  }
   if (city) where.city = city;
   if (tag) where.tags = _.in([tag]);
   if (keyword) {
@@ -55,13 +58,27 @@ async function list(event) {
     .limit(pageSize)
     .get();
 
-  const list = data.map(s => ({
-    _id: s._id, name: s.name, city: s.city, province: s.province,
-    coverImage: s.coverImage || '', images: (s.images || []).slice(0, 1),
-    highlights: s.highlights || [], suitableFor: s.suitableFor || [],
-    ticketPrice: s.ticketPrice || 0, tags: s.tags || [],
-    duration: s.duration || 0
-  }));
+  // ids 查询时返回完整信息（含图集、视频、介绍、玩法）；普通列表只返回摘要
+  const isDetail = ids && ids.length > 0;
+  const list = data.map(s => {
+    if (isDetail) {
+      return {
+        _id: s._id, name: s.name, city: s.city, province: s.province, address: s.address || '',
+        coverImage: s.coverImage || '', images: s.images || [], videoUrl: s.videoUrl || '',
+        highlights: s.highlights || [], suitableFor: s.suitableFor || [],
+        ticketPrice: s.ticketPrice || 0, tags: s.tags || [],
+        duration: s.duration || 0, intro: s.intro || '', playGuide: s.playGuide || '',
+        openHours: s.openHours || ''
+      };
+    }
+    return {
+      _id: s._id, name: s.name, city: s.city, province: s.province,
+      coverImage: s.coverImage || '', images: (s.images || []).slice(0, 1),
+      highlights: s.highlights || [], suitableFor: s.suitableFor || [],
+      ticketPrice: s.ticketPrice || 0, tags: s.tags || [],
+      duration: s.duration || 0
+    };
+  });
 
   return ok({ list, total, pageNo, pageSize });
 }
@@ -75,7 +92,7 @@ async function get(event) {
 }
 
 async function create(event, openid) {
-  if (!(await assertAdmin(openid))) return fail(403, '仅管理员可创建景点');
+  if (!(await assertStaff(openid))) return fail(403, '仅内部员工可创建景点');
   const { name } = event;
   if (!name || !name.trim()) return fail(400, '景点名称不能为空');
 
@@ -107,9 +124,14 @@ async function create(event, openid) {
 }
 
 async function update(event, openid) {
-  if (!(await assertAdmin(openid))) return fail(403, '仅管理员可修改景点');
   const { id } = event;
   if (!id) return fail(400, '缺少景点 id');
+
+  // 权限：在职员工 或 景点创建者（_openid 匹配）
+  const { data: scenic } = await db.collection('scenic').doc(id).get().catch(() => ({ data: null }));
+  if (!scenic) return fail(404, '景点不存在');
+  const isStaff = await assertStaff(openid);
+  if (!isStaff && scenic._openid !== openid) return fail(403, '无权修改该景点');
 
   const fields = ['name', 'city', 'province', 'address', 'location', 'coverImage',
                   'images', 'intro', 'highlights', 'suitableFor', 'ticketPrice',
@@ -126,9 +148,12 @@ async function update(event, openid) {
 }
 
 async function remove(event, openid) {
-  if (!(await assertAdmin(openid))) return fail(403, '仅管理员可删除景点');
   const { id } = event;
   if (!id) return fail(400, '缺少景点 id');
+  const { data: scenic } = await db.collection('scenic').doc(id).get().catch(() => ({ data: null }));
+  if (!scenic) return fail(404, '景点不存在');
+  const isStaff = await assertStaff(openid);
+  if (!isStaff && scenic._openid !== openid) return fail(403, '无权删除该景点');
   await db.collection('scenic').doc(id).update({ data: { status: 'disabled', updatedAt: Date.now() } });
   return ok({ id }, '景点已下架');
 }
@@ -337,6 +362,15 @@ async function updateCovers(openid) {
   });
   await Promise.all(tasks);
   return ok({ updated: data.length }, '封面已更新');
+}
+
+async function assertStaff(openid) {
+  try {
+    const { data } = await db.collection('staff').where({ _openid: openid, status: 'active' }).limit(1).get();
+    return !!data[0];
+  } catch (e) {
+    return false;
+  }
 }
 
 async function assertAdmin(openid) {

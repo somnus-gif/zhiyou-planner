@@ -98,10 +98,14 @@ Page({
     wx.navigateTo({ url: `/pages/scenic/detail/detail?id=${id}` });
   },
 
+  onCreateTap() {
+    wx.navigateTo({ url: '/pages/scenic/edit/edit' });
+  },
+
   async onInitDemo() {
     try {
       const res = await call('scenic', { action: 'initDemo' }, { loading: true });
-      wx.showToast({ title: res.message || '已加载', icon: 'success' });
+      wx.showToast({ title: '已加载 ' + (res.count || 0) + ' 个景点', icon: 'success' });
       this.refreshList();
     } catch (e) {}
   },

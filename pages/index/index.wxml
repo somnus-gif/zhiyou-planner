@@ -29,11 +29,29 @@
   <view class="quick-grid">
     <view class="quick-item" wx:for="{{quickActions}}" wx:key="key"
           data-path="{{item.path}}" bindtap="onQuickTap">
-      <view class="quick-icon" style="background:{{index===0?'#1BA0D7':index===1?'#7E57C2':index===2?'#FA8C16':'#07C160'}};">
-        <text class="quick-icon-text">{{index===0?'新':index===1?'机':index===2?'酒':'景'}}</text>
+      <view class="quick-icon" style="background:{{item.color}};">
+        <text class="quick-icon-text">{{item.iconChar}}</text>
       </view>
       <view class="quick-label">{{item.label}}</view>
     </view>
+  </view>
+
+  <!-- 演示行程入口：已生成则显示查看，未生成则显示生成 -->
+  <view class="demo-entry" wx:if="{{demoTripId}}" bindtap="onViewDemoTrip">
+    <text class="demo-entry-icon">🎬</text>
+    <view class="demo-entry-content">
+      <text class="demo-entry-title">查看演示行程 · 海报展示页</text>
+      <text class="demo-entry-subtitle">{{demoTripTitle}}</text>
+    </view>
+    <text class="demo-entry-arrow">›</text>
+  </view>
+  <view class="demo-entry demo-new" wx:else bindtap="onInitDemo">
+    <text class="demo-entry-icon">✨</text>
+    <view class="demo-entry-content">
+      <text class="demo-entry-title">生成演示行程</text>
+      <text class="demo-entry-subtitle">亚庇+仙本那7天6晚海岛定制游</text>
+    </view>
+    <text class="demo-entry-arrow">›</text>
   </view>
 
   <!-- 阶段筛选 Tab（横向滚动） -->
@@ -71,7 +89,7 @@
 
     <view class="customer-list" wx:else>
       <view class="cust-card" wx:for="{{customerList}}" wx:key="id"
-            data-id="{{item.id}}" bindtap="onCustomerTap">
+            data-id="{{item._id}}" bindtap="onCustomerTap">
         <view class="cust-head">
           <view class="cust-avatar">{{item.name[0]}}</view>
           <view class="cust-info">

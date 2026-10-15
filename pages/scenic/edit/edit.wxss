@@ -1,0 +1,31 @@
+/* pages/scenic/edit/edit.wxss - 景点编辑页 */
+.page { min-height: 100vh; background: #F5F7FA; padding: 24rpx 24rpx 200rpx; box-sizing: border-box; }
+.form { background: #FFFFFF; border-radius: 20rpx; padding: 8rpx 28rpx; }
+.field { padding: 24rpx 0; border-bottom: 1rpx solid #F0F2F5; }
+.field:last-child { border-bottom: none; }
+.field-row { display: flex; }
+.field.half { flex: 1; }
+.field.half:first-child { margin-right: 24rpx; }
+.label-row { display: flex; align-items: center; justify-content: space-between; }
+.label { font-size: 28rpx; color: #333333; margin-bottom: 16rpx; }
+.req { color: #FF4D4F; }
+.input { height: 72rpx; font-size: 30rpx; color: #1F1F1F; }
+.textarea { width: 100%; min-height: 150rpx; font-size: 30rpx; color: #1F1F1F; line-height: 1.5; }
+.chip-wrap { display: flex; flex-wrap: wrap; }
+.chip { padding: 10rpx 26rpx; margin: 0 16rpx 16rpx 0; border-radius: 32rpx; font-size: 26rpx; color: #5A6472; background: #F5F7FA; border: 1rpx solid #F5F7FA; }
+.chip.active { color: #FFFFFF; background: #1BA0D7; border-color: #1BA0D7; }
+.add-link { font-size: 26rpx; color: #1BA0D7; }
+.cover-box { width: 100%; height: 320rpx; border-radius: 16rpx; overflow: hidden; background: #F5F7FA; display: flex; align-items: center; justify-content: center; }
+.cover-img { width: 100%; height: 100%; }
+.cover-empty { font-size: 26rpx; color: #9AA5B5; }
+.cover-actions { display: flex; margin-top: 20rpx; }
+.mini-btn { padding: 12rpx 32rpx; margin-right: 20rpx; font-size: 26rpx; color: #1BA0D7; border: 1rpx solid #1BA0D7; border-radius: 32rpx; }
+.mini-btn.danger { color: #FF4D4F; border-color: #FF4D4F; }
+.footer-bar { position: fixed; left: 0; right: 0; bottom: 0; display: flex; align-items: center; padding: 20rpx 24rpx; background: #FFFFFF; box-shadow: 0 -2rpx 12rpx rgba(0,0,0,0.04); }
+.action-btn { height: 84rpx; line-height: 84rpx; text-align: center; border-radius: 42rpx; font-size: 30rpx; border: none; }
+.action-btn.ghost { flex: 0 0 auto; padding: 0 40rpx; margin-right: 20rpx; color: #1BA0D7; border: 1rpx solid #1BA0D7; background: #FFFFFF; }
+.action-btn.ghost.danger { color: #FF4D4F; border-color: #FF4D4F; }
+.action-btn.primary { flex: 1; color: #FFFFFF; background: #1BA0D7; }
+.action-btn.primary::after { border: none; }
+.action-btn:active { opacity: 0.85; }
+.safe-bottom { height: env(safe-area-inset-bottom); }

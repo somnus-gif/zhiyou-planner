@@ -23,6 +23,25 @@
       </view>
     </view>
 
+    <!-- 行程亮点 -->
+    <view class="form-card">
+      <view class="form-title">行程亮点</view>
+      <textarea class="form-textarea" placeholder="一句话介绍本次行程的亮点（展示在客户行程页顶部）" value="{{intro}}" bindinput="onIntroInput" />
+    </view>
+
+    <!-- 接机服务 -->
+    <view class="form-card">
+      <view class="form-title">接机服务 <text class="form-sub">选填，展示给客户</text></view>
+      <view class="form-row"><text class="form-label">航班号</text><input class="form-input" placeholder="如 AK1571" value="{{pickup.flightNo}}" data-field="flightNo" bindinput="onPickupInput" /></view>
+      <view class="form-row"><text class="form-label">抵达时间</text><input class="form-input" placeholder="如 10:30" value="{{pickup.arriveTime}}" data-field="arriveTime" bindinput="onPickupInput" /></view>
+      <view class="form-row"><text class="form-label">抵达机场</text><input class="form-input" placeholder="如 亚庇国际机场" value="{{pickup.airport}}" data-field="airport" bindinput="onPickupInput" /></view>
+      <view class="form-row"><text class="form-label">集合点</text><input class="form-input" placeholder="如 到达厅 3 号出口" value="{{pickup.meetPoint}}" data-field="meetPoint" bindinput="onPickupInput" /></view>
+      <view class="form-row"><text class="form-label">接送车型</text><input class="form-input" placeholder="如 丰田海狮 11 座" value="{{pickup.vehicle}}" data-field="vehicle" bindinput="onPickupInput" /></view>
+      <view class="form-row"><text class="form-label">司机姓名</text><input class="form-input" placeholder="如 王师傅" value="{{pickup.driverName}}" data-field="driverName" bindinput="onPickupInput" /></view>
+      <view class="form-row"><text class="form-label">司机电话</text><input class="form-input" type="number" placeholder="如 13800138000" value="{{pickup.driverPhone}}" data-field="driverPhone" bindinput="onPickupInput" /></view>
+      <view class="form-row form-row-top"><text class="form-label">温馨提示</text><textarea class="form-textarea form-textarea-sm" placeholder="如 落地后请开漫游，司机在出口举牌等候" value="{{pickup.note}}" data-field="note" bindinput="onPickupInput" /></view>
+    </view>
+
     <!-- 按天编排 -->
     <view class="day-card" wx:for="{{days}}" wx:for-item="day" wx:for-index="dayIdx" wx:key="dayIdx">
       <view class="day-header">

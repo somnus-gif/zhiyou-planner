@@ -76,3 +76,15 @@
 .picker-item-name { font-size: 28rpx; color: #1A1A1A; }
 .picker-item-meta { font-size: 22rpx; color: #999; margin-top: 6rpx; }
 .picker-empty { padding: 80rpx 24rpx; text-align: center; color: #BFBFBF; font-size: 26rpx; }
+
+/* ===== 行程亮点 / 接机服务表单 ===== */
+.form-card { background: #fff; padding: 28rpx 24rpx; margin-bottom: 16rpx; }
+.form-title { font-size: 30rpx; font-weight: 700; color: #1A1A1A; margin-bottom: 20rpx; }
+.form-sub { font-size: 22rpx; color: #BFBFBF; font-weight: 400; margin-left: 12rpx; }
+.form-row { display: flex; align-items: center; padding: 16rpx 0; border-bottom: 1rpx solid #F5F7FA; }
+.form-row:last-child { border-bottom: none; }
+.form-row-top { align-items: flex-start; }
+.form-label { width: 132rpx; flex-shrink: 0; font-size: 26rpx; color: #8C8C8C; }
+.form-input { flex: 1; font-size: 27rpx; color: #1A1A1A; padding: 10rpx 0; }
+.form-textarea { width: 100%; min-height: 140rpx; font-size: 27rpx; color: #1A1A1A; padding: 10rpx 0; box-sizing: border-box; }
+.form-textarea-sm { flex: 1; min-height: 100rpx; padding-top: 10rpx; }

@@ -142,3 +142,26 @@
 }
 .wish-label { color: #8C8C8C; }
 .wish-text { color: #595959; }
+
+/* ===== 调试入口：生成演示行程 ===== */
+.demo-entry {
+  margin: 0 24rpx 16rpx;
+  padding: 20rpx 24rpx;
+  background: linear-gradient(90deg, #E6F4FB, #D0E8F7);
+  border: 1rpx solid #86C6E8;
+  border-radius: 16rpx;
+  display: flex;
+  align-items: center;
+  gap: 16rpx;
+}
+.demo-entry.demo-new {
+  background: linear-gradient(90deg, #FFF7ED, #FFEFD6);
+  border: 1rpx dashed #FA8C16;
+}
+.demo-entry:active { opacity: 0.85; }
+.demo-entry-icon { font-size: 36rpx; }
+.demo-entry-content { flex: 1; display: flex; flex-direction: column; gap: 4rpx; }
+.demo-entry-title { font-size: 28rpx; color: #0F7BA6; font-weight: 500; }
+.demo-new .demo-entry-title { color: #D46B08; }
+.demo-entry-subtitle { font-size: 22rpx; color: #595959; }
+.demo-entry-arrow { font-size: 32rpx; color: #BFBFBF; font-weight: 300; }

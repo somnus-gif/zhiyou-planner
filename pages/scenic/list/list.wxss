@@ -64,3 +64,9 @@
 .duration { color: #BFBFBF; font-size: 22rpx; }
 
 .load-more { width: 100%; text-align: center; color: #BFBFBF; font-size: 24rpx; padding: 24rpx 0; }
+
+.fab { position: fixed; right: 32rpx; bottom: 120rpx; width: 100rpx; height: 100rpx; border-radius: 50%; background: #1BA0D7; color: #FFFFFF; font-size: 60rpx; line-height: 96rpx; text-align: center; box-shadow: 0 6rpx 20rpx rgba(27,160,215,0.35); z-index: 20; }
+.fab:active { opacity: 0.85; }
+.add-bar { padding: 16rpx 24rpx 0; }
+.add-btn { display: inline-block; padding: 14rpx 32rpx; background: #1BA0D7; color: #FFFFFF; font-size: 26rpx; border-radius: 32rpx; }
+.add-btn:active { opacity: 0.85; }

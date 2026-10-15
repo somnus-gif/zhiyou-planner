@@ -6,7 +6,7 @@ App({
     openid: null,           // 当前用户 openid
     isLoggedIn: false,      // 登录态
     env: 'develop',        // 云环境：develop / prod
-    cloudEnvId: ''          // 留空则使用默认云环境
+    cloudEnvId: 'cloud1-d5gwyk6x9796cfc46'    // 云开发环境 ID（云开发控制台 → 环境名下拉可见，须带后缀，仅填名称会报 Env Not Exists）
   },
 
   onLaunch() {

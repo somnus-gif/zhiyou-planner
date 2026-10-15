@@ -1,0 +1,80 @@
+<!-- pages/trip/list/list.wxml - 行程方案列表 -->
+<view class="page">
+  <view class="add-bar"><view class="add-btn" bindtap="onCreateTap">+ 新建行程</view></view>
+
+  <view class="list-area">
+    <view class="state-box" wx:if="{{pageState==='loading'}}">
+      <view class="skeleton-card" wx:for="{{[1,2,3]}}" wx:key="*this">
+        <view class="sk-line sk-title"></view>
+        <view class="sk-line sk-sub"></view>
+      </view>
+    </view>
+
+    <view class="state-box" wx:elif="{{pageState==='empty'}}">
+      <view class="empty-illu">○</view>
+      <view class="empty-text">还没有行程方案</view>
+      <view class="empty-action" bindtap="onCreateTap">新建第一条行程</view>
+    </view>
+
+    <view class="state-box" wx:elif="{{pageState==='error'}}">
+      <view class="err-illu">!</view>
+      <view class="err-text">网络异常，加载失败</view>
+      <view class="err-retry" bindtap="onRetry">点击重试</view>
+    </view>
+
+    <view class="trip-list" wx:else>
+      <view class="trip-card" wx:for="{{list}}" wx:key="_id"
+            data-id="{{item._id}}" bindtap="onTripTap">
+        <view class="trip-head">
+          <view class="trip-title">{{item.title || '未命名行程'}}</view>
+          <view class="trip-status status-{{item.status}}">{{item.statusLabel}}</view>
+        </view>
+        <view class="trip-meta">
+          <text class="meta-item" wx:if="{{item.customerName}}">{{item.customerName}}</text>
+          <text class="meta-item" wx:if="{{item.daysCount}}">{{item.daysCount}}天</text>
+          <text class="meta-item">v{{item.version}}</text>
+          <text class="meta-item">{{item.updatedAtText}}</text>
+        </view>
+        <view class="trip-actions">
+          <view class="trip-btn" data-id="{{item._id}}" catchtap="onEditTap">编辑</view>
+          <view class="trip-btn danger" data-id="{{item._id}}" data-title="{{item.title}}" catchtap="onDeleteTap">删除</view>
+        </view>
+      </view>
+
+      <view class="load-more" wx:if="{{loadingMore}}">加载中...</view>
+      <view class="load-more" wx:elif="{{!hasMore && list.length}}">没有更多了</view>
+    </view>
+  </view>
+
+  <view class="safe-bottom"></view>
+
+  <!-- 新建行程：选择关联客户 -->
+  <view class="picker-mask" wx:if="{{pickerShow}}" bindtap="onClosePicker">
+    <view class="picker-sheet" catchtap="noop">
+      <view class="picker-head">
+        <text class="picker-title">选择关联客户</text>
+        <text class="picker-close" bindtap="onClosePicker">✕</text>
+      </view>
+      <view class="picker-search">
+        <input class="picker-field" type="text" placeholder="搜索客户姓名"
+               value="{{pickerKeyword}}" bindinput="onPickerKeywordInput"
+               bindconfirm="onPickerSearch" confirm-type="search" />
+        <view class="picker-search-btn" bindtap="onPickerSearch">搜索</view>
+      </view>
+      <scroll-view scroll-y class="picker-body">
+        <view class="picker-item" wx:for="{{pickerList}}" wx:key="_id"
+              data-id="{{item._id}}" data-name="{{item.name}}" bindtap="onPickCustomer">
+          <view class="picker-avatar">{{item.name[0]}}</view>
+          <view class="picker-info">
+            <view class="picker-name">{{item.name}}</view>
+            <view class="picker-phone">{{item.phone || '未填写手机号'}}</view>
+          </view>
+          <text class="picker-arrow">›</text>
+        </view>
+        <view class="picker-empty" wx:if="{{!pickerList.length}}">
+          {{pickerLoading ? '加载中...' : '没有找到客户'}}
+        </view>
+      </scroll-view>
+    </view>
+  </view>
+</view>

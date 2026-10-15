@@ -1,19 +1,58 @@
-<!-- pages/profile/index/index.wxml - 我的（占位） -->
+<!-- pages/profile/index/index.wxml - 我的 -->
 <view class="page">
   <view class="profile-hero">
     <view class="avatar">{{userInfo.name ? userInfo.name[0] : '智'}}</view>
     <view class="info">
       <view class="name">{{userInfo.name || '未登录'}}</view>
-      <view class="role" wx:if="{{userInfo.role}}">
-        {{userInfo.role === 'admin' ? '管理员' : '定制师'}}
-      </view>
+      <view class="role" wx:if="{{roleText}}">{{roleText}}</view>
     </view>
   </view>
+
+  <view class="stats-card">
+    <view class="stat-item" bindtap="onGoCustomers">
+      <view class="stat-num">{{stats.following}}</view>
+      <view class="stat-label">跟进中客户</view>
+    </view>
+    <view class="stat-item">
+      <view class="stat-num">{{stats.newThisWeek}}</view>
+      <view class="stat-label">本周新增</view>
+    </view>
+    <view class="stat-item" bindtap="onGoTrip">
+      <view class="stat-num">{{stats.tripTotal}}</view>
+      <view class="stat-label">行程方案</view>
+    </view>
+    <view class="stat-item">
+      <view class="stat-num">{{stats.todoCount}}</view>
+      <view class="stat-label">待办事项</view>
+    </view>
+  </view>
+
   <view class="menu">
-    <view class="menu-item">
+    <view class="menu-item" bindtap="onGoCustomers">
+      <text>我的客户</text>
+      <text class="menu-arrow">›</text>
+    </view>
+    <view class="menu-item" bindtap="onGoTrip">
+      <text>行程方案管理</text>
+      <text class="menu-arrow">›</text>
+    </view>
+    <view class="menu-item" bindtap="onGoScenic">
+      <text>景点库管理</text>
+      <text class="menu-arrow">›</text>
+    </view>
+    <view class="menu-item" bindtap="onAbout">
       <text>关于智游策划师</text>
       <text class="menu-val">v{{version}}</text>
     </view>
-    <view class="menu-tip">个人中心模块开发中</view>
+    <view class="menu-item" bindtap="onContactAdmin">
+      <text>联系管理员</text>
+      <text class="menu-arrow">›</text>
+    </view>
+    <view class="menu-item menu-item-last" bindtap="onClearCache">
+      <text>清除本地缓存</text>
+      <text class="menu-arrow">›</text>
+    </view>
   </view>
+
+  <view class="profile-footer">智游策划师 · 私人定制</view>
 </view>

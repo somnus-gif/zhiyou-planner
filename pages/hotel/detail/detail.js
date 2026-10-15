@@ -33,6 +33,7 @@ Page({
       const today = formatDateStr(Date.now());
       const tomorrow = formatDateStr(Date.now() + 86400000);
       this.setData({ mode: 'new', customerId, tripId, checkIn: today, checkOut: tomorrow, pageState: 'form' });
+      wx.setNavigationBarTitle({ title: '新建酒店方案' });
     }
   },
 

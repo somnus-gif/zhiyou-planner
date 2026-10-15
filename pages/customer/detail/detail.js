@@ -154,7 +154,7 @@ Page({
 
   onTripTap(e) {
     const id = e.currentTarget.dataset.id;
-    if (id) wx.navigateTo({ url: '/pages/trip/preview/preview?id=' + id });
+    if (id) wx.navigateTo({ url: '/pages/trip/showcase/showcase?id=' + id });
   },
 
   onCreateQuote() {

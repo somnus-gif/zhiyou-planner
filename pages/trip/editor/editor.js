@@ -11,6 +11,8 @@ Page({
     customerName: '',
     title: '',
     days: [],
+    pickup: { flightNo: '', arriveTime: '', airport: '', meetPoint: '', vehicle: '', driverName: '', driverPhone: '', note: '' },
+    intro: '',
     pageState: 'loading',
     saving: false,
     // 景点选择弹窗
@@ -65,6 +67,8 @@ Page({
       this.setData({
         title: t.title || '',
         days,
+        pickup: t.pickup || { flightNo: '', arriveTime: '', airport: '', meetPoint: '', vehicle: '', driverName: '', driverPhone: '', note: '' },
+        intro: t.intro || '',
         customerId: t.customerId || '',
         customerName,
         pageState: 'ok'
@@ -109,6 +113,13 @@ Page({
   },
 
   onTitleInput(e) { this.setData({ title: e.detail.value }); },
+
+  onPickupInput(e) {
+    const field = e.currentTarget.dataset.field;
+    this.setData({ ['pickup.' + field]: e.detail.value });
+  },
+
+  onIntroInput(e) { this.setData({ intro: e.detail.value }); },
 
   onDayInput(e) {
     const { idx, field } = e.currentTarget.dataset;
@@ -230,9 +241,20 @@ Page({
   },
 
   async onSave() {
-    const { title, days, isEdit, tripId, customerId } = this.data;
+    const { title, days, isEdit, tripId, customerId, pickup, intro } = this.data;
     if (!title || !title.trim()) return wx.showToast({ title: '请填写标题', icon: 'none' });
     if (!days.length) return wx.showToast({ title: '请至少保留一天', icon: 'none' });
+
+    // 清洗 pickup：去掉展示字段，全空则存 null
+    const p = pickup || {};
+    const cleanPickup = ['flightNo','arriveTime','airport','meetPoint','vehicle','driverName','driverPhone','note']
+      .some(k => (p[k] || '').trim())
+      ? {
+          flightNo: p.flightNo || '', arriveTime: p.arriveTime || '', airport: p.airport || '',
+          meetPoint: p.meetPoint || '', vehicle: p.vehicle || '', driverName: p.driverName || '',
+          driverPhone: p.driverPhone || '', note: p.note || ''
+        }
+      : null;
 
     // 清洗 days（去掉 typeLabel 等展示字段）
     const cleanDays = days.map(d => ({
@@ -253,7 +275,7 @@ Page({
     this.setData({ saving: true });
     try {
       if (isEdit) {
-        await call('tripPlan', { action: 'update', id: tripId, title: title.trim() });
+        await call('tripPlan', { action: 'update', id: tripId, title: title.trim(), pickup: cleanPickup, intro: intro.trim() });
         await call('tripPlan', { action: 'saveDays', id: tripId, days: cleanDays }, { loading: true });
         wx.showToast({ title: '已保存', icon: 'success' });
       } else {
@@ -261,7 +283,9 @@ Page({
           action: 'create',
           customerId,
           title: title.trim(),
-          days: cleanDays
+          days: cleanDays,
+          pickup: cleanPickup,
+          intro: intro.trim()
         }, { loading: true });
         const newId = res && res._id;
         wx.showToast({ title: '已创建', icon: 'success' });
